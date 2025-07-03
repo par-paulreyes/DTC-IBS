@@ -32,9 +32,9 @@ export default function AdminPage() {
       const headers = { "Authorization": `Bearer ${token}` };
 
       const [pendingRes, approvedRes, borrowedRes] = await Promise.all([
-        fetch("http://localhost:5000/api/admin/pending", { headers }),
-        fetch("http://localhost:5000/api/admin/approved", { headers }),
-        fetch("http://localhost:5000/api/admin/borrowed", { headers })
+        fetch("http://localhost:5001/api/admin/pending", { headers }),
+fetch("http://localhost:5001/api/admin/approved", { headers }),
+fetch("http://localhost:5001/api/admin/borrowed", { headers })
       ]);
 
       if (pendingRes.ok) setPending(await pendingRes.json());
@@ -51,7 +51,7 @@ export default function AdminPage() {
   const handleApprove = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/admin/approve/${id}`, {
+      const response = await fetch(`http://localhost:5001/api/admin/approve/${id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -70,7 +70,7 @@ export default function AdminPage() {
   const handleDecline = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/admin/decline/${id}`, {
+      const response = await fetch(`http://localhost:5001/api/admin/decline/${id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -89,7 +89,7 @@ export default function AdminPage() {
   const handleScanBorrow = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/admin/scan-borrow/${id}`, {
+      const response = await fetch(`http://localhost:5001/api/admin/scan-borrow/${id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -108,7 +108,7 @@ export default function AdminPage() {
   const handleScanReturn = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/admin/scan-return/${id}`, {
+      const response = await fetch(`http://localhost:5001/api/admin/scan-return/${id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,

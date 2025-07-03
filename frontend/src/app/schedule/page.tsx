@@ -58,7 +58,7 @@ export default function SchedulePage() {
         return_date: returnDate
       };
 
-      const response = await fetch("http://localhost:5000/api/borrow", {
+      const response = await fetch("http://localhost:5001/api/borrow", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
