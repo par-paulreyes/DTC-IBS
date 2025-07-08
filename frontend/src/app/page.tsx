@@ -29,6 +29,8 @@ export default function HomePage() {
   const [statusFilter, setStatusFilter] = useState("");
   const router = useRouter();
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
   useEffect(() => {
     // Load selectedItems from localStorage
     const selectedItemsStr = localStorage.getItem("selectedItems");
@@ -45,7 +47,7 @@ export default function HomePage() {
 
     const fetchItems = async () => {
       try {
-        const response = await fetch("http://localhost:5001/api/items");
+        const response = await fetch(`${apiUrl}/api/items`);
         if (!response.ok) {
           throw new Error("Failed to fetch items");
         }

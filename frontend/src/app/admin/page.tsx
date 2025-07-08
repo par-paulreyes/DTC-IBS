@@ -51,6 +51,8 @@ export default function AdminPage() {
   const [editFields, setEditFields] = useState({ status: '', pickup_date: '', return_date: '', remarks: '' });
   const [viewItems, setViewItems] = useState<{ logId: number, items: any[] } | null>(null);
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
   useEffect(() => {
     fetchAllRequests();
     fetchAllLogs();
@@ -62,9 +64,9 @@ export default function AdminPage() {
       const headers = { "Authorization": `Bearer ${token}` };
 
       const [pendingRes, approvedRes, borrowedRes] = await Promise.all([
-        fetch("http://localhost:5001/api/admin/pending", { headers }),
-fetch("http://localhost:5001/api/admin/approved", { headers }),
-fetch("http://localhost:5001/api/admin/borrowed", { headers })
+        fetch(`${apiUrl}/api/admin/pending`, { headers }),
+        fetch(`${apiUrl}/api/admin/approved`, { headers }),
+        fetch(`${apiUrl}/api/admin/borrowed`, { headers })
       ]);
 
       if (pendingRes.ok) setPending(await pendingRes.json());
@@ -81,7 +83,7 @@ fetch("http://localhost:5001/api/admin/borrowed", { headers })
   const fetchAllLogs = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/admin/logs", {
+      const response = await fetch(`${apiUrl}/api/admin/logs`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (response.ok) setLogs(await response.json());
@@ -95,7 +97,7 @@ fetch("http://localhost:5001/api/admin/borrowed", { headers })
     const itemIds = parseItemIds(request.item_ids);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/items/details", {
+      const response = await fetch(`${apiUrl}/api/items/details`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({ ids: itemIds })
@@ -115,7 +117,7 @@ fetch("http://localhost:5001/api/admin/borrowed", { headers })
     if (!approveRequestId) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5001/api/admin/approve/${approveRequestId}`, {
+      const response = await fetch(`${apiUrl}/api/admin/approve/${approveRequestId}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -141,7 +143,7 @@ fetch("http://localhost:5001/api/admin/borrowed", { headers })
   const handleDecline = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5001/api/admin/decline/${id}`, {
+      const response = await fetch(`${apiUrl}/api/admin/decline/${id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -164,7 +166,7 @@ fetch("http://localhost:5001/api/admin/borrowed", { headers })
     const itemIds = parseItemIds(request.item_ids);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5001/api/admin/scan-borrow/${id}`, {
+      const response = await fetch(`${apiUrl}/api/admin/scan-borrow/${id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -184,7 +186,7 @@ fetch("http://localhost:5001/api/admin/borrowed", { headers })
   const handleScanReturn = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5001/api/admin/scan-return/${id}`, {
+      const response = await fetch(`${apiUrl}/api/admin/scan-return/${id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -232,9 +234,9 @@ fetch("http://localhost:5001/api/admin/borrowed", { headers })
       let endpoint: string;
       
       if (checklistData.type === 'borrow') {
-        endpoint = `http://localhost:5000/api/admin/scan-borrow/${checklistData.requestId}`;
+        endpoint = `${apiUrl}/api/admin/scan-borrow/${checklistData.requestId}`;
       } else if (checklistData.type === 'return') {
-        endpoint = `http://localhost:5000/api/admin/scan-return/${checklistData.requestId}`;
+        endpoint = `${apiUrl}/api/admin/scan-return/${checklistData.requestId}`;
       } else {
         throw new Error('Invalid checklist type');
       }
@@ -344,7 +346,7 @@ fetch("http://localhost:5001/api/admin/borrowed", { headers })
   const handleDeleteLog = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/borrow/${id}`, {
+      const response = await fetch(`${apiUrl}/api/borrow/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -372,7 +374,7 @@ fetch("http://localhost:5001/api/admin/borrowed", { headers })
     if (!editLog) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/admin/logs/${editLog.id}`, {
+      const response = await fetch(`${apiUrl}/api/admin/logs/${editLog.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify(editFields)
@@ -390,7 +392,7 @@ fetch("http://localhost:5001/api/admin/borrowed", { headers })
       const token = localStorage.getItem("token");
       const ids = parseItemIds(log.item_ids);
       console.log('Fetching items for IDs:', ids);
-      const response = await fetch(`http://localhost:5000/api/items/details`, {
+      const response = await fetch(`${apiUrl}/api/items/details`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({ ids })

@@ -14,7 +14,8 @@ export default function VerifyPage() {
       setMessage("");
       return;
     }
-    fetch(`http://localhost:5001/api/auth/verify?token=${token}`)
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    fetch(`${apiUrl}/api/auth/verify?token=${token}`)
       .then(res => res.json())
       .then(data => {
         if (data.error) {

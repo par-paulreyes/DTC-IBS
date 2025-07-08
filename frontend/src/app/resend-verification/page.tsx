@@ -7,6 +7,8 @@ export default function ResendVerificationPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -14,7 +16,7 @@ export default function ResendVerificationPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5001/api/auth/resend-verification", {
+      const res = await fetch(`${apiUrl}/api/auth/resend-verification`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

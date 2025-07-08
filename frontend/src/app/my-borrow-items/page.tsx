@@ -19,6 +19,8 @@ export default function MyBorrowItemsPage() {
   const [error, setError] = useState("");
   const router = useRouter();
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
   useEffect(() => {
     fetchRequests();
   }, []);
@@ -26,7 +28,7 @@ export default function MyBorrowItemsPage() {
   const fetchRequests = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5001/api/borrow", {
+      const response = await fetch(`${apiUrl}/api/borrow`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -48,7 +50,7 @@ export default function MyBorrowItemsPage() {
   const handleCancel = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5001/api/borrow/${id}`, {
+      const response = await fetch(`${apiUrl}/api/borrow/${id}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -69,7 +71,7 @@ export default function MyBorrowItemsPage() {
   const handleDelete = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/borrow/${id}`, {
+      const response = await fetch(`${apiUrl}/api/borrow/${id}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`
