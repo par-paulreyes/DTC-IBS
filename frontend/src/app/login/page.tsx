@@ -18,7 +18,7 @@ export default function LoginPage() {
     setLoading(true);
     const emailPattern = /^\d{2}-\d{5}@g\.batstate-u\.edu\.ph$/;
     if (!emailPattern.test(email)) {
-      setError("Email must be in format: XX-XXXXX@g.batstate-u.edu.ph (e.g., 22-00869@g.batstate-u.edu.ph)");
+      setError("Email must be in format: XX-XXXXX@g.batstate-u.edu.ph (e.g., 22-0869@g.batstate-u.edu.ph)");
       setLoading(false);
       return;
     }
@@ -51,40 +51,46 @@ export default function LoginPage() {
     <div className="flex min-h-screen font-sans bg-[#e9ecf4]">
       {/* Left Side - Info with creative overlay */}
       <div className="hidden md:flex flex-col justify-center w-1/2 bg-cover bg-center relative" style={{backgroundImage: 'url(/dtc-bg.png)'}}>
-        <div className="absolute inset-0 bg-gradient-to-br from-primaryBlue/90 via-primaryBlue/80 to-primaryRed/80"></div>
-        <div className="relative z-10 flex flex-col justify-center px-6 sm:px-12 h-full text-white">
-          <div className="flex items-center mb-6 sm:mb-8">
-            <FaBoxOpen className="w-8 h-8 sm:w-12 sm:h-12 mr-3 sm:mr-4 text-white" />
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold whitespace-nowrap text-white">Inventory Access System</h1>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#162C49]/70 via-[#162C49]/50 to-[#C1121F]/50"></div>
+        <div className="relative z-10 flex flex-col justify-center h-full px-8 lg:px-12 max-w-2xl">
+          {/* Logo and Title Section - One Line */}
+          <div className="flex items-center gap-4 mb-8">
+          <img src="/dtc-logo.jpg" alt="DTC Logo" className="w-24 h-24 lg:w-28 lg:h-28 object-cover shadow-lg border-2 border-white flex-shrink-0" />
+            <div className="flex flex-col">
+              <h1 className="text-3xl lg:text-4xl font-bold !text-white leading-tight">Digital Transformation Center</h1>
+              <h2 className="text-xl lg:text-2xl font-semibold !text-white leading-tight">Inventory Access System</h2>
+            </div>
           </div>
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-light mb-4 sm:mb-6 text-white">Digital Transformation Center</h2>
-          <p className="text-base sm:text-lg lg:text-xl opacity-90 mb-6 sm:mb-8 text-white">Streamline your inventory operations with our comprehensive tracking and borrowing system.</p>
-          <div className="space-y-3 sm:space-y-4 text-white">
-            <div className="flex items-start text-white">
-              <FaMapMarkerAlt className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 mt-1 flex-shrink-0 text-white" />
-              <span className="text-sm sm:text-base text-white">2F STEER Hub Bldg., Batangas State University, TNEU - Alangilan Campus, Golden Country Homes, Alangilan, Batangas City</span>
+          
+          {/* Contact Information */}
+          <div className="space-y-5">
+            <div className="flex items-start">
+              <FaMapMarkerAlt className="w-5 h-5 lg:w-6 lg:h-6 mr-3 mt-1 flex-shrink-0 !text-white" />
+              <span className="text-base lg:text-lg !text-white">2F STEER Hub Bldg., Batangas State University, TNEU - Alangilan Campus, Golden Country Homes, Alangilan, Batangas City</span>
             </div>
-            <div className="flex items-center text-white">
-              <FaEnvelope className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 flex-shrink-0 text-white" />
-              <span className="text-sm sm:text-base text-white">dtc@g.batstate-u.edu.ph</span>
+            <div className="flex items-center">
+              <FaEnvelope className="w-5 h-5 lg:w-6 lg:h-6 mr-3 flex-shrink-0 !text-white" />
+              <span className="text-base lg:text-lg !text-white">dtc@g.batstate-u.edu.ph</span>
             </div>
-            <div className="flex items-center text-white">
-              <FaPhone className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 flex-shrink-0 text-white" />
-              <span className="text-sm sm:text-base text-white">(043) 425-0139</span>
+            <div className="flex items-center">
+              <FaPhone className="w-5 h-5 lg:w-6 lg:h-6 mr-3 flex-shrink-0 !text-white" />
+              <span className="text-base lg:text-lg !text-white">(043) 425-0139</span>
             </div>
           </div>
         </div>
       </div>
+      
       {/* Right Side - Login Form */}
-      <div className="flex flex-1 flex-col items-center justify-center relative">
+      <div className="flex flex-1 flex-col items-center justify-center relative bg-[#e9ecf4]">
         {/* Welcome Back and subtitle outside the container */}
-        <div className="flex flex-col items-center mb-6 mt-8">
+        <div className="flex flex-col items-center mb-6">
           <div className="w-20 h-1.5 rounded-full bg-[#C1121F] mb-5"></div>
           <h2 className="text-3xl font-extrabold text-[#162C49] tracking-tight mb-1">Welcome Back</h2>
-          <p className="text-base text-[#162C49] font-normal">Sign in to access your inventory system</p>
+          <p className="text-base text-[#162C9] font-normal">Sign in to access your inventory system</p>
         </div>
+        
         {/* Login Container */}
-        <div className="w-full max-w-sm rounded-2xl shadow-lg px-7 py-8 bg-white border border-gray-200">
+        <div className="w-full max-w-sm rounded-2xl shadow-lg px-7 py-8 bg-white border border-[#162C49]/20">
           <form onSubmit={handleSubmit}>
             <div className="mb-5">
               <label className="block text-sm font-semibold text-[#162C49] mb-2">Email Address</label>
@@ -93,7 +99,7 @@ export default function LoginPage() {
                 placeholder="Enter your email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C1121F] focus:border-transparent text-base font-normal bg-white placeholder-gray-400"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#162C49] focus:border-transparent text-base font-normal bg-white placeholder-gray-400"
                 required
                 disabled={loading}
               />
@@ -105,20 +111,20 @@ export default function LoginPage() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C1121F] focus:border-transparent text-base font-normal bg-white placeholder-gray-400"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#162C49] focus:border-transparent text-base font-normal bg-white placeholder-gray-400"
                 required
                 disabled={loading}
               />
             </div>
             {error && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-600 text-sm font-medium">{error}</p>
+                <p className="text-[#C1121F] text-sm font-medium">{error}</p>
               </div>
             )}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#C1121F] text-white py-3 rounded-lg font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-[#C1121F] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow hover:brightness-95"
+              className="w-full bg-[#C1121F] text-white py-3 rounded-lg font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-[#162C49] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow hover:bg-[#162C49] hover:text-white"
             >
               {loading ? (
                 <div className="flex items-center justify-center">
@@ -126,7 +132,7 @@ export default function LoginPage() {
                   <span className="text-white">Signing in...</span>
                 </div>
               ) : (
-                <span className="text-white">Sign In</span>
+                <span className="!text-white">Sign In</span>
               )}
             </button>
           </form>
@@ -134,4 +140,4 @@ export default function LoginPage() {
       </div>
     </div>
   );
-} 
+}
