@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body 
+      <body
         className={`${inter.className} antialiased`}
         suppressHydrationWarning={true}
       >

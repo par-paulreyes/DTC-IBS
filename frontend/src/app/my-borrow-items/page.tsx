@@ -66,9 +66,27 @@ export default function MyBorrowItemsPage() {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:5000/api/borrow/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete request");
+      }
+      fetchRequests();
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending':
+      case 'To be Borrowed':
         return 'bg-yellow-100 text-yellow-800';
       case 'approved':
         return 'bg-blue-100 text-blue-800';
@@ -76,6 +94,8 @@ export default function MyBorrowItemsPage() {
         return 'bg-green-100 text-green-800';
       case 'returned':
         return 'bg-gray-100 text-black';
+      case 'declined':
+        return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-black';
     }
@@ -92,6 +112,13 @@ export default function MyBorrowItemsPage() {
       return [];
     }
   };
+
+  // Group and order requests
+  const topRequests = [
+    ...requests.filter(r => r.status === 'approved'),
+    ...requests.filter(r => r.status === 'To be Borrowed')
+  ];
+  const otherRequests = requests.filter(r => r.status !== 'approved' && r.status !== 'To be Borrowed' && r.status !== 'returned');
 
   return (
     <AuthGuard>
@@ -114,65 +141,136 @@ export default function MyBorrowItemsPage() {
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
           ) : (
-            <div className="space-y-6">
-              {requests.map((request) => (
-                <div key={request.id} className="bg-white rounded-lg shadow-md p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-4 mb-2">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(request.status)}`}>
-                          {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
-                        </span>
-                        <span className="text-sm text-black">
-                          Requested on {formatDate(request.created_at)}
-                        </span>
-                      </div>
-                      
-                      <div className="grid md:grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <strong>Pick-up Date:</strong> {formatDate(request.pickup_date)}
+            <>
+              <div className="space-y-6">
+                {topRequests.map((request) => (
+                  <div key={request.id} className="bg-white rounded-lg shadow-md p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-4 mb-2">
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(request.status)}`}>
+                            {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                          </span>
+                          <span className="text-sm text-black">
+                            Requested on {formatDate(request.created_at)}
+                          </span>
                         </div>
-                        <div>
-                          <strong>Return Date:</strong> {formatDate(request.return_date)}
+                        <div className="grid md:grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <strong>Pick-up Date:</strong> {formatDate(request.pickup_date)}
+                          </div>
+                          <div>
+                            <strong>Return Date:</strong> {formatDate(request.return_date)}
+                          </div>
+                        </div>
+                        <div className="mt-3">
+                          <strong>Items:</strong>
+                          <div className="mt-1">
+                            {parseItemIds(request.item_ids).map((itemId: number, index: number) => (
+                              <span key={index} className="inline-block bg-gray-100 rounded px-2 py-1 text-xs mr-2 mb-1 text-black">
+                                Item #{itemId}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
-
-                      <div className="mt-3">
-                        <strong>Items:</strong>
-                        <div className="mt-1">
-                          {parseItemIds(request.item_ids).map((itemId: number, index: number) => (
-                            <span key={index} className="inline-block bg-gray-100 rounded px-2 py-1 text-xs mr-2 mb-1 text-black">
-                              Item #{itemId}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
+                      {request.status === 'To be Borrowed' && (
+                        <button
+                          onClick={() => handleCancel(request.id)}
+                          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors ml-4"
+                        >
+                          Cancel
+                        </button>
+                      )}
                     </div>
-
-                    {request.status === 'pending' && (
-                      <button
-                        onClick={() => handleCancel(request.id)}
-                        className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors ml-4"
-                      >
-                        Cancel
-                      </button>
-                    )}
+                  </div>
+                ))}
+                {otherRequests.map((request) => (
+                  <div key={request.id} className="bg-white rounded-lg shadow-md p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-4 mb-2">
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(request.status)}`}>
+                            {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                          </span>
+                          <span className="text-sm text-black">
+                            Requested on {formatDate(request.created_at)}
+                          </span>
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <strong>Pick-up Date:</strong> {formatDate(request.pickup_date)}
+                          </div>
+                          <div>
+                            <strong>Return Date:</strong> {formatDate(request.return_date)}
+                          </div>
+                        </div>
+                        <div className="mt-3">
+                          <strong>Items:</strong>
+                          <div className="mt-1">
+                            {parseItemIds(request.item_ids).map((itemId: number, index: number) => (
+                              <span key={index} className="inline-block bg-gray-100 rounded px-2 py-1 text-xs mr-2 mb-1 text-black">
+                                Item #{itemId}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      {request.status === 'To be Borrowed' && (
+                        <button
+                          onClick={() => handleCancel(request.id)}
+                          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors ml-4"
+                        >
+                          Cancel
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Returned Items Section */}
+              {requests.some(r => r.status === 'returned') && (
+                <div className="mt-10">
+                  <h2 className="text-2xl font-bold text-black mb-4">Returned Items</h2>
+                  <div className="space-y-6">
+                    {requests.filter(r => r.status === 'returned').map((request) => (
+                      <div key={request.id} className="bg-white rounded-lg shadow-md p-6">
+                        <div className="flex justify-between items-start mb-4">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-4 mb-2">
+                              <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(request.status)}`}>
+                                {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                              </span>
+                              <span className="text-sm text-black">
+                                Requested on {formatDate(request.created_at)}
+                              </span>
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-4 text-sm">
+                              <div>
+                                <strong>Pick-up Date:</strong> {formatDate(request.pickup_date)}
+                              </div>
+                              <div>
+                                <strong>Return Date:</strong> {formatDate(request.return_date)}
+                              </div>
+                            </div>
+                            <div className="mt-3">
+                              <strong>Items:</strong>
+                              <div className="mt-1">
+                                {parseItemIds(request.item_ids).map((itemId: number, index: number) => (
+                                  <span key={index} className="inline-block bg-gray-100 rounded px-2 py-1 text-xs mr-2 mb-1 text-black">
+                                    Item #{itemId}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))}
-
-              {requests.length === 0 && (
-                <div className="text-center py-12">
-                  <p className="text-black text-lg">No borrow requests found.</p>
-                  <button
-                    onClick={() => router.push("/")}
-                    className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
-                  >
-                    Browse Items
-                  </button>
-                </div>
               )}
-            </div>
+            </>
           )}
         </div>
       </div>

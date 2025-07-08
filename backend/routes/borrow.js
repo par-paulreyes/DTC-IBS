@@ -32,10 +32,23 @@ router.post('/', authMiddleware, async (req, res) => {
     return res.status(400).json({ error: 'Missing fields' });
   }
   try {
+    // Prevent duplicate borrow requests
+    const [existing] = await pool.query(
+      'SELECT * FROM borrow_requests WHERE user_id = ? AND status IN (?, ?, ?) AND pickup_date = ? AND return_date = ? AND item_ids = ?',
+      [req.user.id, 'To be Borrowed', 'approved', 'borrowed', pickup_date, return_date, JSON.stringify(item_ids)]
+    );
+    if (existing.length > 0) {
+      return res.status(400).json({ error: 'Duplicate borrow request detected.' });
+    }
+    // Set status to 'To be Borrowed' for the request
     const [result] = await pool.query(
       'INSERT INTO borrow_requests (user_id, item_ids, status, pickup_date, return_date) VALUES (?, ?, ?, ?, ?)',
-      [req.user.id, JSON.stringify(item_ids), 'pending', pickup_date, return_date]
+      [req.user.id, JSON.stringify(item_ids), 'To be Borrowed', pickup_date, return_date]
     );
+    // Update each item's item_status to 'To be Borrowed'
+    for (const itemId of item_ids) {
+      await pool.query('UPDATE items SET item_status = ? WHERE id = ?', ['To be Borrowed', itemId]);
+    }
     res.json({ id: result.insertId });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -45,11 +58,20 @@ router.post('/', authMiddleware, async (req, res) => {
 // Cancel pending request
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
+    // Get the item_ids for the request
+    const [[request]] = await pool.query('SELECT item_ids FROM borrow_requests WHERE id = ? AND user_id = ? AND status = ?', [req.params.id, req.user.id, 'To be Borrowed']);
+    if (!request) return res.status(404).json({ error: 'Not found or not To be Borrowed' });
+    const itemIds = JSON.parse(request.item_ids);
+    // Update the borrow request status to 'cancelled'
     const [result] = await pool.query(
-      'DELETE FROM borrow_requests WHERE id = ? AND user_id = ? AND status = ?',
-      [req.params.id, req.user.id, 'pending']
+      'UPDATE borrow_requests SET status = ? WHERE id = ? AND user_id = ? AND status = ?',
+      ['cancelled', req.params.id, req.user.id, 'To be Borrowed']
     );
-    if (result.affectedRows === 0) return res.status(404).json({ error: 'Not found or not pending' });
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Not found or not To be Borrowed' });
+    // Update all items in the request to Available
+    for (const itemId of itemIds) {
+      await pool.query('UPDATE items SET item_status = ? WHERE id = ?', ['Available', itemId]);
+    }
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });

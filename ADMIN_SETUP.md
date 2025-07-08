@@ -10,6 +10,7 @@ npm run create-admin
 
 This creates an admin user with:
 - **Email**: `99-99999@g.batstate-u.edu.ph`
+- **Password**: `99-99999`
 - **Role**: `admin`
 
 ### 2. **Add Sample Data**
@@ -36,7 +37,7 @@ npm run dev
 
 ### 4. **Access Admin Dashboard**
 - Go to: http://localhost:3000/login
-- Login with: `99-99999@g.batstate-u.edu.ph`
+- Login with: `99-99999@g.batstate-u.edu.ph` and password `99-99999`
 - Click "Admin" in the navbar
 
 ## 👨‍💼 Admin Features
@@ -115,6 +116,7 @@ npm run dev
 1. **Login as Admin**
    ```
    Email: 99-99999@g.batstate-u.edu.ph
+   Password: 99-99999
    ```
 
 2. **Check Pending Tab**
@@ -156,7 +158,9 @@ npm run dev
 
 ### **Create Additional Admin Users**
 ```sql
-INSERT INTO students (email, role) VALUES ('newadmin@sr-code@g.batstate-u.edu.ph', 'admin');
+-- First, hash the password (replace 'password' with actual password)
+-- Then insert with hashed password
+INSERT INTO students (email, password, role) VALUES ('newadmin@sr-code@g.batstate-u.edu.ph', 'hashed_password_here', 'admin');
 ```
 
 ### **Change User Role**

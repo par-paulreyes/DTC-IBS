@@ -1,4 +1,5 @@
 const mysql = require('mysql2/promise');
+const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 async function addSampleData() {
@@ -24,8 +25,11 @@ async function addSampleData() {
 
     for (const user of users) {
       try {
-        await pool.query('INSERT INTO students (email, role) VALUES (?, ?)', [user.email, user.role]);
-        console.log(`✅ User created: ${user.email}`);
+        // Extract student ID for password
+        const studentId = user.email.split('@')[0];
+        const hashedPassword = await bcrypt.hash(studentId, 10);
+        await pool.query('INSERT INTO students (email, password, role) VALUES (?, ?, ?)', [user.email, hashedPassword, user.role]);
+        console.log(`✅ User created: ${user.email} (password: ${studentId})`);
       } catch (error) {
         if (error.code === 'ER_DUP_ENTRY') {
           console.log(`⚠️  User already exists: ${user.email}`);
@@ -87,9 +91,9 @@ async function addSampleData() {
     for (const item of items) {
       try {
         await pool.query(`
-          INSERT INTO items (property_no, qr_code, article_type, specifications, location, company_name, price, date_acquired)
-          VALUES (?, ?, ?, ?, ?, ?, ?, CURDATE())
-        `, [item.property_no, item.qr_code, item.article_type, item.specifications, item.location, item.company_name, item.price]);
+          INSERT INTO items (property_no, qr_code, article_type, specifications, location, company_name, price, date_acquired, item_status)
+          VALUES (?, ?, ?, ?, ?, ?, ?, CURDATE(), ?)
+        `, [item.property_no, item.qr_code, item.article_type, item.specifications, item.location, item.company_name, item.price, 'Available']);
         console.log(`✅ Item created: ${item.article_type} (${item.property_no})`);
       } catch (error) {
         if (error.code === 'ER_DUP_ENTRY') {
@@ -105,7 +109,7 @@ async function addSampleData() {
       {
         user_email: '22-00869@g.batstate-u.edu.ph',
         item_ids: [1],
-        status: 'pending',
+        status: 'To be Borrowed',
         pickup_date: '2024-07-10',
         return_date: '2024-07-15'
       },
