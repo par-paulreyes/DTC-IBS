@@ -62,9 +62,9 @@ export default function AdminPage() {
       const headers = { "Authorization": `Bearer ${token}` };
 
       const [pendingRes, approvedRes, borrowedRes] = await Promise.all([
-        fetch("http://localhost:5000/api/admin/pending", { headers }),
-        fetch("http://localhost:5000/api/admin/approved", { headers }),
-        fetch("http://localhost:5000/api/admin/borrowed", { headers })
+        fetch("http://localhost:5001/api/admin/pending", { headers }),
+fetch("http://localhost:5001/api/admin/approved", { headers }),
+fetch("http://localhost:5001/api/admin/borrowed", { headers })
       ]);
 
       if (pendingRes.ok) setPending(await pendingRes.json());
@@ -115,7 +115,7 @@ export default function AdminPage() {
     if (!approveRequestId) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/admin/approve/${approveRequestId}`, {
+      const response = await fetch(`http://localhost:5001/api/admin/approve/${approveRequestId}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -141,7 +141,7 @@ export default function AdminPage() {
   const handleDecline = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/admin/decline/${id}`, {
+      const response = await fetch(`http://localhost:5001/api/admin/decline/${id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -164,10 +164,12 @@ export default function AdminPage() {
     const itemIds = parseItemIds(request.item_ids);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/items/details", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-        body: JSON.stringify({ ids: itemIds })
+      const response = await fetch(`http://localhost:5001/api/admin/scan-borrow/${id}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
       });
       if (response.ok) {
         const requestItems = await response.json();
@@ -181,16 +183,13 @@ export default function AdminPage() {
 
   const handleScanReturn = async (id: number) => {
     try {
-      // Get items for this request
-      const request = borrowed.find(r => r.id === id);
-      if (!request) return;
-
-      const itemIds = parseItemIds(request.item_ids);
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/items/details", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-        body: JSON.stringify({ ids: itemIds })
+      const response = await fetch(`http://localhost:5001/api/admin/scan-return/${id}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
       });
       if (response.ok) {
         const requestItems = await response.json();
