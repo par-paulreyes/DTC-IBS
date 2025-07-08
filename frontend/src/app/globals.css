@@ -46,3 +46,40 @@ body {
 .text-red-800 {
   color: inherit !important;
 }
+
+/* Creative minimalist enhancements */
+.glass-card {
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 8px 32px 0 rgba(16, 40, 80, 0.12);
+  backdrop-filter: blur(8px);
+  border-radius: 1.5rem;
+  border-left: 8px solid #162C49;
+}
+
+.glass-card-red {
+  border-left: 8px solid #C1121F;
+}
+
+.creative-btn {
+  border-radius: 1.25rem;
+  font-weight: bold;
+  box-shadow: 0 4px 16px 0 rgba(193, 18, 31, 0.10);
+  transition: all 0.2s cubic-bezier(.4,0,.2,1);
+}
+
+.creative-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px 0 rgba(22, 44, 73, 0.18);
+}
+
+/* For creative status badges */
+.status-pill {
+  border-radius: 9999px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px 0 rgba(22, 44, 73, 0.10);
+  border-width: 2px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}

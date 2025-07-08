@@ -158,43 +158,43 @@ export default function HomePage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-white flex flex-col">
         <Navbar />
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-black mb-2">Inventory Items</h1>
-            <p className="text-black">Select items you want to borrow</p>
+        <div className="max-w-6xl mx-auto px-4 py-12 flex-1">
+          <div className="mb-10">
+            <h1 className="text-4xl font-extrabold text-primaryBlue mb-2 tracking-tight drop-shadow-lg">Inventory Items</h1>
+            <p className="text-lg text-primaryRed font-medium">Select items you want to borrow</p>
           </div>
 
           {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+            <div className="bg-primaryRed/10 border border-primaryRed text-primaryRed px-4 py-3 rounded-xl mb-6 shadow-md">
               {error}
             </div>
           )}
 
           {/* Filters */}
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 className="text-lg font-semibold text-black mb-4">Filters</h2>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="bg-white/80 rounded-3xl shadow-xl p-8 mb-10 border-l-8 border-primaryRed">
+            <h2 className="text-xl font-bold text-primaryBlue mb-6">Filters</h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               {/* Search */}
               <div>
-                <label className="block text-sm font-medium text-black mb-2">Search</label>
+                <label className="block text-sm font-semibold text-primaryBlue mb-2">Search</label>
                 <input
                   type="text"
                   placeholder="Search items..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border-2 border-primaryRed rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryRed/60 bg-white/60 text-primaryBlue font-medium transition"
                 />
               </div>
 
               {/* Article Type Filter */}
               <div>
-                <label className="block text-sm font-medium text-black mb-2">Article Type</label>
+                <label className="block text-sm font-semibold text-primaryBlue mb-2">Article Type</label>
                 <select
                   value={articleTypeFilter}
                   onChange={(e) => setArticleTypeFilter(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border-2 border-primaryRed rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryRed/60 bg-white/60 text-primaryBlue font-medium transition"
                 >
                   <option value="">All Types</option>
                   <option value="laptop">Laptop</option>
@@ -208,11 +208,11 @@ export default function HomePage() {
 
               {/* Status Filter */}
               <div>
-                <label className="block text-sm font-medium text-black mb-2">Status</label>
+                <label className="block text-sm font-semibold text-primaryBlue mb-2">Status</label>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border-2 border-primaryRed rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryRed/60 bg-white/60 text-primaryBlue font-medium transition"
                 >
                   <option value="">All Status</option>
                   <option value="Available">Available</option>
@@ -225,7 +225,7 @@ export default function HomePage() {
               <div className="flex items-end">
                 <button
                   onClick={clearFilters}
-                  className="w-full px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+                  className="w-full px-4 py-2 bg-primaryRed text-white rounded-xl font-bold shadow-lg border-2 border-primaryRed hover:bg-primaryBlue hover:border-primaryBlue hover:scale-105 transition-all duration-200"
                 >
                   Clear Filters
                 </button>
@@ -235,19 +235,19 @@ export default function HomePage() {
 
           {/* Selected Items Display */}
           {selectedItems.size > 0 && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-              <h2 className="text-xl font-semibold text-black mb-4">Selected Items ({selectedItems.size})</h2>
+            <div className="bg-primaryBlue/10 border-l-8 border-primaryBlue rounded-3xl p-6 mb-8 shadow-xl">
+              <h2 className="text-2xl font-bold text-primaryRed mb-4">Selected Items ({selectedItems.size})</h2>
               <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                 {getSelectedItems().map((item) => (
-                  <div key={item.id} className="bg-white rounded-md p-3 border border-blue-200">
+                  <div key={item.id} className="bg-white/90 rounded-2xl p-3 border-l-4 border-primaryBlue shadow-md flex flex-col gap-1">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-medium text-black">{item.article_type}</h3>
-                        <p className="text-sm text-black">Property No: {item.property_no}</p>
+                        <h3 className="font-semibold text-primaryBlue">{item.article_type}</h3>
+                        <p className="text-xs text-primaryRed">Property No: {item.property_no}</p>
                       </div>
                       <button
                         onClick={() => handleItemToggle(item.id)}
-                        className="text-red-600 hover:text-red-800 text-sm font-medium"
+                        className="text-primaryRed hover:text-primaryBlue text-xs font-bold px-2 py-1 rounded-lg bg-primaryRed/10 hover:bg-primaryBlue/10 border-2 border-primaryRed hover:border-primaryBlue transition"
                       >
                         Remove
                       </button>
@@ -255,10 +255,10 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 pt-4 border-t border-blue-200">
+              <div className="mt-4 pt-3 border-t border-primaryBlue flex justify-end">
                 <button
                   onClick={handleProceedToSchedule}
-                  className="bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition-colors font-medium"
+                  className="bg-primaryBlue text-white py-2 px-6 rounded-2xl font-bold shadow-xl border-2 border-primaryBlue hover:bg-primaryRed hover:border-primaryRed hover:scale-105 transition-all duration-200 text-base tracking-wide"
                 >
                   Proceed to Schedule ({selectedItems.size} items)
                 </button>
@@ -267,52 +267,48 @@ export default function HomePage() {
           )}
 
           {loading ? (
-            <div className="flex justify-center items-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="flex justify-center items-center py-10">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primaryRed"></div>
             </div>
           ) : (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {filteredItems.map((item) => (
-                <div key={item.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-                  <div className="flex items-start gap-3 mb-4">
+                <div key={item.id} className="bg-white/90 rounded-3xl shadow-2xl p-5 hover:shadow-primaryRed/30 border-l-8 border-primaryRed transition-all duration-200 flex flex-col gap-1">
+                  <div className="flex items-start gap-3 mb-2">
                     <input
                       type="checkbox"
                       checked={selectedItems.has(item.id)}
                       onChange={() => handleItemToggle(item.id)}
-                      className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 accent-primaryRed focus:ring-primaryBlue border-primaryRed rounded-xl shadow-sm"
                       disabled={item.item_status !== 'Available'}
                     />
                     <div className="flex-1">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="text-lg font-semibold text-black">{item.article_type}</h3>
-                          <p className="text-sm text-black">Property No: {item.property_no}</p>
+                          <h3 className="text-base font-bold text-primaryBlue mb-0.5">{item.article_type}</h3>
+                          <p className="text-xs text-primaryRed">Property No: {item.property_no}</p>
                         </div>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          item.item_status === 'Available' ? 'bg-green-100 text-green-800' : 
-                          item.item_status === 'Borrowed' ? 'bg-red-100 text-red-800' : 
-                          item.item_status === 'To be Borrowed' ? 'bg-yellow-100 text-yellow-800' :
-                          item.item_status === 'Bad Condition' ? 'bg-gray-400 text-black' :
-                          'bg-gray-100 text-black'
-                        }`}>
+                        <span className={`px-4 py-1 rounded-full text-xs font-bold shadow-md border-2 transition-all duration-200
+                          ${item.item_status === 'Available' ? 'bg-primaryBlue text-white border-primaryBlue' :
+                            item.item_status === 'Borrowed' ? 'bg-primaryRed text-white border-primaryRed' :
+                            item.item_status === 'To be Borrowed' ? 'bg-yellow-500 text-yellow-900 border-yellow-500' :
+                            'bg-gray-100 text-gray-500 border-gray-300'}
+                        `}>
                           {item.item_status || 'Available'}
                         </span>
                       </div>
                     </div>
                   </div>
-                  
                   {item.specifications && (
-                    <p className="text-sm text-black mb-4">{item.specifications}</p>
+                    <p className="text-xs text-primaryBlue/80 mb-1">{item.specifications}</p>
                   )}
-                  
                   {item.location && (
-                    <p className="text-sm text-black mb-4">Location: {item.location}</p>
+                    <p className="text-xs text-primaryRed/80 mb-1">Location: {item.location}</p>
                   )}
-
-                  <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
+                  <div className="flex justify-between items-center mt-3 pt-2 border-t border-primaryRed">
                     <button
                       onClick={() => handleShowDetails(item)}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      className="text-primaryBlue hover:text-primaryRed text-xs font-bold px-2 py-1 rounded-lg bg-primaryBlue/10 hover:bg-primaryRed/10 border-2 border-primaryBlue hover:border-primaryRed transition"
                     >
                       Show Details
                     </button>
@@ -323,8 +319,8 @@ export default function HomePage() {
           )}
 
           {!loading && filteredItems.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-black text-lg">
+            <div className="text-center py-16">
+              <p className="text-primaryBlue text-xl font-bold">
                 {items.length === 0 
                   ? "No items available at the moment." 
                   : "No items match your current filters. Try adjusting your search criteria."
@@ -336,51 +332,51 @@ export default function HomePage() {
 
         {/* Item Details Modal */}
         {showDetailsModal && selectedItemDetails && (
-          <div className="fixed inset-0 flex items-center justify-center bg-transparent z-50" aria-modal="true" role="dialog">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 shadow-2xl">
-              <h2 className="text-xl font-bold mb-4">Item Details</h2>
-              <div className="space-y-3">
+          <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50" aria-modal="true" role="dialog">
+            <div className="bg-white rounded-3xl p-8 w-full max-w-md mx-4 shadow-2xl border-l-8 border-primaryRed">
+              <h2 className="text-2xl font-extrabold mb-6 text-primaryBlue">Item Details</h2>
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-black">Article Type</label>
-                  <p className="text-sm text-black">{selectedItemDetails.article_type}</p>
+                  <label className="block text-xs font-semibold text-primaryRed">Article Type</label>
+                  <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.article_type}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-black">Property No</label>
-                  <p className="text-sm text-black">{selectedItemDetails.property_no}</p>
+                  <label className="block text-xs font-semibold text-primaryRed">Property No</label>
+                  <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.property_no}</p>
                 </div>
                 {selectedItemDetails.qr_code && (
                   <div>
-                    <label className="block text-sm font-medium text-black">QR Code</label>
-                    <p className="text-sm text-black">{selectedItemDetails.qr_code}</p>
+                    <label className="block text-xs font-semibold text-primaryRed">QR Code</label>
+                    <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.qr_code}</p>
                   </div>
                 )}
                 {selectedItemDetails.location && (
                   <div>
-                    <label className="block text-sm font-medium text-black">Location</label>
-                    <p className="text-sm text-black">{selectedItemDetails.location}</p>
+                    <label className="block text-xs font-semibold text-primaryRed">Location</label>
+                    <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.location}</p>
                   </div>
                 )}
                 {selectedItemDetails.specifications && (
                   <div>
-                    <label className="block text-sm font-medium text-black">Specifications</label>
-                    <p className="text-sm text-black">{selectedItemDetails.specifications}</p>
+                    <label className="block text-xs font-semibold text-primaryRed">Specifications</label>
+                    <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.specifications}</p>
                   </div>
                 )}
                 <div>
-                  <label className="block text-sm font-medium text-black">Status</label>
-                  <p className="text-sm text-black">{selectedItemDetails.item_status || 'Available'}</p>
+                  <label className="block text-xs font-semibold text-primaryRed">Status</label>
+                  <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.item_status || 'Available'}</p>
                 </div>
                 {selectedItemDetails.remarks && (
                   <div>
-                    <label className="block text-sm font-medium text-black">Remarks</label>
-                    <p className="text-sm text-black">{selectedItemDetails.remarks}</p>
+                    <label className="block text-xs font-semibold text-primaryRed">Remarks</label>
+                    <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.remarks}</p>
                   </div>
                 )}
               </div>
-              <div className="flex justify-end mt-6">
+              <div className="flex justify-end mt-8">
                 <button
                   onClick={closeDetailsModal}
-                  className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                  className="px-6 py-2 bg-primaryBlue text-white rounded-xl font-bold shadow-lg border-2 border-primaryBlue hover:bg-primaryRed hover:border-primaryRed hover:scale-105 transition-all duration-200"
                 >
                   Close
                 </button>
