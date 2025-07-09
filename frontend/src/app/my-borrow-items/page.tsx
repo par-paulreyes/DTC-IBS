@@ -17,6 +17,7 @@ export default function MyBorrowItemsPage() {
   const [requests, setRequests] = useState<BorrowRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [itemDetails, setItemDetails] = useState<Record<number, { id: number; article_type: string }>>({});
   const router = useRouter();
   const [statusFilter, setStatusFilter] = useState("");
 
@@ -25,6 +26,17 @@ export default function MyBorrowItemsPage() {
   useEffect(() => {
     fetchRequests();
   }, []);
+
+  useEffect(() => {
+    // After requests are loaded, fetch all unique item details
+    if (requests.length > 0) {
+      const allItemIds = Array.from(new Set(requests.flatMap(r => parseItemIds(r.item_ids))));
+      if (allItemIds.length > 0) {
+        fetchItemDetails(allItemIds);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requests]);
 
   const fetchRequests = async () => {
     try {
@@ -45,6 +57,27 @@ export default function MyBorrowItemsPage() {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchItemDetails = async (ids: number[]) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${apiUrl}/api/items/details`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({ ids })
+      });
+      if (response.ok) {
+        const details = await response.json();
+        const detailsMap: Record<number, { id: number; article_type: string }> = {};
+        details.forEach((item: any) => {
+          detailsMap[item.id] = { id: item.id, article_type: item.article_type };
+        });
+        setItemDetails(detailsMap);
+      }
+    } catch (err) {
+      // Optionally handle error
     }
   };
 
@@ -182,7 +215,7 @@ export default function MyBorrowItemsPage() {
                   {topRequests
                     .filter(request => !statusFilter || request.status === statusFilter)
                     .map((request) => (
-                      <div key={request.id} className="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-2xl p-8 border-l-8 border-[#162C49] border-2 border-black hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]">
+                      <div key={request.id} className="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-2xl p-3 border-l-8 border-[#162C49] border-2 border-black hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]">
                         <div className="flex justify-between items-start mb-6">
                           <div className="flex-1">
                             <div className="flex items-center space-x-4 mb-4">
@@ -190,6 +223,7 @@ export default function MyBorrowItemsPage() {
                                 ${request.status === 'approved' ? 'bg-green-600 text-black border-green-600' :
                                   request.status === 'declined' ? 'bg-yellow-200 text-black border-yellow-200' :
                                   request.status === 'cancelled' ? 'bg-[#162C49] text-white border-[#162C49]' :
+                                  request.status === 'To be Borrowed' ? 'bg-yellow-200 text-black border-yellow-200' :
                                   'bg-gray-100 text-black border-gray-100'}
                               `}>
                                 {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
@@ -212,8 +246,8 @@ export default function MyBorrowItemsPage() {
                               <div className="font-bold text-[#162C49] mb-3">Items</div>
                               <div className="flex flex-wrap gap-2">
                                 {parseItemIds(request.item_ids).map((itemId: number, index: number) => (
-                                  <span key={index} className="inline-block bg-white rounded-xl px-4 py-2 text-sm font-semibold text-[#162C49] border-2 border-[#162C49] shadow-md hover:shadow-lg transition-all duration-300">
-                                    Item #{itemId}
+                                  <span key={index} className="inline-block bg-white rounded-xl px-3 py-1 text-xs font-semibold text-[#162C49] border-2 border-[#162C49] shadow-md hover:shadow-lg transition-all duration-300">
+                                    Item #{itemId} - {itemDetails[itemId]?.article_type || 'Loading...'}
                                   </span>
                                 ))}
                               </div>
@@ -222,9 +256,9 @@ export default function MyBorrowItemsPage() {
                           {request.status === 'To be Borrowed' && (
                             <button
                               onClick={() => handleCancel(request.id)}
-                              className="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-2xl font-bold border-2 border-red-600 shadow-xl hover:from-red-600 hover:to-red-700 hover:scale-105 hover:shadow-2xl transition-all duration-300 ml-4"
+                              className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-2xl font-bold text-xs border-2 border-red-600 shadow-xl hover:from-red-600 hover:to-red-700 hover:scale-105 hover:shadow-2xl transition-all duration-300 ml-4"
                             >
-                              ❌ Cancel
+                              Cancel
                             </button>
                           )}
                         </div>
@@ -237,7 +271,7 @@ export default function MyBorrowItemsPage() {
                 <h2 className="text-2xl font-bold text-[#162C49] mb-6">Returned Items</h2>
                 <div className="grid gap-8">
                   {requests.filter(r => r.status === 'returned').map((request) => (
-                    <div key={request.id} className="bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-xl p-8 border-l-8 border-gray-400 border-2 border-gray-300 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02]">
+                    <div key={request.id} className="bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-xl p-3 border-l-8 border-gray-400 border-2 border-gray-300 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02]">
                       <div className="flex justify-between items-start mb-6">
                         <div className="flex-1">
                           <div className="flex items-center space-x-4 mb-4">
@@ -262,8 +296,8 @@ export default function MyBorrowItemsPage() {
                             <div className="font-bold text-gray-700 mb-3">Items</div>
                             <div className="flex flex-wrap gap-2">
                               {parseItemIds(request.item_ids).map((itemId: number, index: number) => (
-                                <span key={index} className="inline-block bg-white rounded-xl px-4 py-2 text-sm font-semibold text-gray-600 border-2 border-gray-300 shadow-md">
-                                  Item #{itemId}
+                                <span key={index} className="inline-block bg-white rounded-xl px-3 py-1 text-xs font-semibold text-gray-600 border-2 border-gray-300 shadow-md">
+                                  Item #{itemId} - {itemDetails[itemId]?.article_type || 'Loading...'}
                                 </span>
                               ))}
                             </div>
