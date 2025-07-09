@@ -58,17 +58,20 @@ router.post('/', authMiddleware, async (req, res) => {
 // Cancel pending request
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
-    // Get the item_ids for the request
+    if (req.user.role === 'admin') {
+      // Admin: hard delete any borrow request
+      await pool.query('DELETE FROM borrow_requests WHERE id = ?', [req.params.id]);
+      return res.json({ success: true });
+    }
+    // User: only cancel their own 'To be Borrowed' requests
     const [[request]] = await pool.query('SELECT item_ids FROM borrow_requests WHERE id = ? AND user_id = ? AND status = ?', [req.params.id, req.user.id, 'To be Borrowed']);
     if (!request) return res.status(404).json({ error: 'Not found or not To be Borrowed' });
     const itemIds = JSON.parse(request.item_ids);
-    // Update the borrow request status to 'cancelled'
     const [result] = await pool.query(
       'UPDATE borrow_requests SET status = ? WHERE id = ? AND user_id = ? AND status = ?',
       ['cancelled', req.params.id, req.user.id, 'To be Borrowed']
     );
     if (result.affectedRows === 0) return res.status(404).json({ error: 'Not found or not To be Borrowed' });
-    // Update all items in the request to Available
     for (const itemId of itemIds) {
       await pool.query('UPDATE items SET item_status = ? WHERE id = ?', ['Available', itemId]);
     }
