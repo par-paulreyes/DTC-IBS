@@ -134,7 +134,7 @@ export default function HomePage() {
   const handleShowDetails = async (item: Item) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/items/details", {
+      const response = await fetch(`${apiUrl}/api/items/details`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({ ids: [item.id] })
