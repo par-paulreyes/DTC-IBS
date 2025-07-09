@@ -42,8 +42,8 @@ export default function SchedulePage() {
       setError("Please select both pickup and return dates");
       return;
     }
-    if (new Date(pickupDate) >= new Date(returnDate)) {
-      setError("Return date must be after pickup date");
+    if (new Date(returnDate) < new Date(pickupDate)) {
+      setError("Return date cannot be before pickup date");
       return;
     }
     setLoading(true);
@@ -106,8 +106,8 @@ export default function SchedulePage() {
       setError("Please select both pickup and return dates");
       return;
     }
-    if (new Date(pickupDate) >= new Date(returnDate)) {
-      setError("Return date must be after pickup date");
+    if (new Date(returnDate) < new Date(pickupDate)) {
+      setError("Return date cannot be before pickup date");
       return;
     }
     setError("");
@@ -130,221 +130,224 @@ export default function SchedulePage() {
     <AuthGuard>
       <div className="min-h-screen bg-white flex flex-col">
         <Navbar />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="w-full max-w-2xl mx-auto px-2 py-4">
-            <div className="mb-8 text-center">
-              <h1 className="text-4xl font-extrabold text-primaryBlue mb-2 tracking-tight">Schedule Items</h1>
-              <p className="text-lg font-semibold text-primaryRed">Select dates and submit your borrow request</p>
-            </div>
+        <div className="flex-1">
+          <div className="max-w-5xl mx-auto px-6 py-10">
+            <div className="bg-white/90 rounded-2xl shadow-xl p-8 border-l-8 border-[#162C49] border-2 border-black">
+              <div className="mb-8 flex flex-col items-center">
+                <h1 className="text-4xl font-extrabold text-[#162C49] mb-2 tracking-tight drop-shadow-lg">Schedule Items</h1>
+                <p className="text-lg font-semibold text-[#162C49]">Select dates and submit your borrow request</p>
+              </div>
 
-            {/* Progress Steps */}
-            <div className="mb-8 flex items-center justify-center gap-6">
-              {["Select Dates", "Review Summary", "Submit Request"].map((label, idx) => (
-                <div key={label} className="flex flex-col items-center">
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all duration-300
-                    ${currentStep === (idx === 0 ? 'dates' : idx === 1 ? 'summary' : 'request')
-                      ? (idx % 2 === 0 ? 'border-primaryRed bg-primaryRed text-white scale-110 shadow-lg' : 'border-primaryBlue bg-primaryBlue text-white scale-110 shadow-lg')
-                      : (idx % 2 === 0 ? 'border-primaryRed bg-white text-primaryRed opacity-60' : 'border-primaryBlue bg-white text-primaryBlue opacity-60')}`}
-                  >
-                    {idx + 1}
+              {/* Progress Steps */}
+              <div className="mb-8 flex items-center justify-center gap-8">
+                {["Select Dates", "Review Summary", "Submit Request"].map((label, idx) => (
+                  <div key={label} className="flex flex-col items-center">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 shadow-xl font-bold text-lg transition-all duration-300
+                      ${currentStep === (idx === 0 ? 'dates' : idx === 1 ? 'summary' : 'request')
+                        ? 'bg-[#162C49] border-[#162C49] text-white scale-110' : 'bg-white border-[#162C49] text-[#162C49] opacity-60'}`}
+                    >
+                      {idx + 1}
+                    </div>
+                    <span className={`mt-2 text-sm font-semibold ${currentStep === (idx === 0 ? 'dates' : idx === 1 ? 'summary' : 'request') ? 'text-[#162C49]' : 'text-[#162C49] opacity-60'}`}>{label}</span>
                   </div>
-                  <span className={`mt-2 text-xs font-semibold ${currentStep === (idx === 0 ? 'dates' : idx === 1 ? 'summary' : 'request') ? (idx % 2 === 0 ? 'text-primaryRed' : 'text-primaryBlue') : (idx % 2 === 0 ? 'text-primaryRed opacity-60' : 'text-primaryBlue opacity-60')}`}>{label}</span>
+                ))}
+              </div>
+
+              {error && (
+                <div className="bg-[#162C49]/10 border-2 border-[#162C49] text-[#162C49] px-4 py-3 rounded-2xl mb-6 text-center shadow">
+                  {error}
                 </div>
-              ))}
-            </div>
-
-            {error && (
-              <div className="bg-primaryRed/10 border border-primaryRed text-primaryRed px-4 py-3 rounded mb-6 text-center">
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="bg-primaryBlue/10 border border-primaryBlue text-primaryBlue px-4 py-3 rounded mb-6 flex flex-col items-center">
-                <span>{success} Redirecting to My Borrow Items...</span>
-                <button
-                  onClick={() => router.push('/my-borrow-items')}
-                  className="mt-4 bg-primaryBlue text-white px-6 py-2 rounded-full font-semibold shadow transition-all duration-200 hover:bg-white hover:text-primaryBlue hover:border-primaryBlue border-2 border-primaryBlue hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primaryBlue/50"
-                >
-                  Go to My Borrow Items Now
-                </button>
-              </div>
-            )}
-
-            {/* Creative Single-Color Container */}
-            <div className="relative rounded-2xl shadow-xl mb-8 border-4 border-primaryRed bg-primaryBlue/5 p-4">
-              {/* Selected Items - Always Visible */}
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 text-primaryBlue">Selected Items</h2>
-                {selectedItems.length === 0 ? (
-                  <>
-                    <p className="text-primaryBlue">No items selected</p>
-                    {(!pickupDate && !returnDate) && (
-                      <p className="text-primaryRed mt-2">No schedule set. Please select dates and items to create a schedule.</p>
-                    )}
-                  </>
-                ) : (
-                  <div className="space-y-3">
-                    {selectedItems.map((item) => (
-                      <div key={item.id} className="flex justify-between items-center p-3 bg-primaryBlue/10 rounded-xl">
-                        <div>
-                          <h3 className="font-semibold text-primaryBlue">{item.article_type}</h3>
-                          <p className="text-xs text-primaryBlue">Property No: {item.property_no}</p>
-                          {item.specifications && (
-                            <p className="text-xs text-primaryBlue">{item.specifications}</p>
-                          )}
-                        </div>
-                        <button
-                          onClick={() => handleRemoveItem(item.id)}
-                          className="ml-4 bg-primaryRed text-white text-xs rounded-full px-3 py-1 border-2 border-primaryRed hover:bg-white hover:text-primaryRed hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primaryRed/50"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                <button
-                  onClick={() => {
-                    localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
-                    router.push("/");
-                  }}
-                  className="mt-4 bg-primaryRed text-white text-sm px-4 py-2 rounded-full font-semibold border-2 border-primaryRed shadow transition-all duration-200 hover:bg-white hover:text-primaryRed hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primaryRed/50"
-                >
-                  + Add More Items
-                </button>
-              </div>
-
-              {/* Step 1: Date Selection */}
-              {currentStep === 'dates' && (
-                <>
-                  <div className="grid md:grid-cols-2 gap-8 mb-8">
-                    <div>
-                      <label className="block text-sm font-semibold text-primaryBlue mb-2">
-                        Pick-up Date
-                      </label>
-                      <input
-                        type="date"
-                        value={pickupDate}
-                        onChange={(e) => setPickupDate(e.target.value)}
-                        min={new Date().toISOString().split('T')[0]}
-                        className="w-full p-3 border border-primaryBlue/30 rounded-xl focus:ring-2 focus:ring-primaryRed focus:border-transparent bg-white/80 text-primaryBlue font-medium"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold text-primaryBlue mb-2">
-                        Return Date
-                      </label>
-                      <input
-                        type="date"
-                        value={returnDate}
-                        onChange={(e) => setReturnDate(e.target.value)}
-                        min={pickupDate || new Date().toISOString().split('T')[0]}
-                        className="w-full p-3 border border-primaryBlue/30 rounded-xl focus:ring-2 focus:ring-primaryRed focus:border-transparent bg-white/80 text-primaryBlue font-medium"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={handleNextToSummary}
-                    className="w-full bg-primaryBlue text-white py-3 px-4 rounded-full font-bold text-lg shadow transition-all duration-200 hover:bg-white hover:text-primaryBlue hover:border-primaryBlue border-2 border-primaryBlue hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primaryBlue/50"
-                    disabled={selectedItems.length === 0}
-                  >
-                    Next
-                  </button>
-                  {selectedItems.length === 0 && (
-                    <p className="text-primaryRed mt-2 text-center">Please select at least one item to schedule.</p>
-                  )}
-                </>
               )}
 
-              {/* Step 2: Summary */}
-              {currentStep === 'summary' && (
-                <>
-                  <div className="bg-primaryBlue/5 p-8 rounded-2xl mb-8">
-                    <h3 className="font-bold mb-4 text-primaryBlue text-xl">Request Summary</h3>
-                    <div className="space-y-3 text-primaryBlue">
-                      <div className="flex justify-between">
-                        <span className="font-semibold">Pick-up Date:</span>
-                        <span>{pickupDate}</span>
+              {success && (
+                <div className="bg-[#162C49]/10 border-2 border-[#162C49] text-[#162C49] px-4 py-3 rounded-2xl mb-6 flex flex-col items-center shadow">
+                  <span>{success} Redirecting to My Borrow Items...</span>
+                  <button
+                    onClick={() => router.push('/my-borrow-items')}
+                    className="mt-4 bg-[#162C49] text-white px-6 py-2 rounded-2xl font-semibold shadow-xl border-2 border-[#162C49] hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                  >
+                    Go to My Borrow Items Now
+                  </button>
+                </div>
+              )}
+
+              {/* Main Schedule Container */}
+              <div className="relative rounded-2xl shadow-xl mb-8 border-2 border-[#162C49] bg-white/95 p-6">
+                {/* Selected Items - Always Visible */}
+                <div className="mb-8">
+                  <h2 className="text-2xl font-bold mb-4 text-[#162C49]">Selected Items</h2>
+                  {selectedItems.length === 0 ? (
+                    <>
+                      <p className="text-[#162C49]">No items selected</p>
+                      {(!pickupDate && !returnDate) && (
+                        <p className="text-[#162C49] mt-2">No schedule set. Please select dates and items to create a schedule.</p>
+                      )}
+                    </>
+                  ) : (
+                    <div className="space-y-3">
+                      {selectedItems.map((item) => (
+                        <div key={item.id} className="flex justify-between items-center p-3 bg-[#162C49]/10 rounded-2xl border-2 border-[#162C49] shadow">
+                          <div>
+                            <h3 className="font-semibold text-[#162C49]">{item.article_type}</h3>
+                            <p className="text-xs text-[#162C49]">Property No: {item.property_no}</p>
+                            {item.specifications && (
+                              <p className="text-xs text-[#162C49]">{item.specifications}</p>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => handleRemoveItem(item.id)}
+                            className="ml-4 bg-[#162C49] text-white text-xs rounded-2xl px-4 py-2 border-2 border-[#162C49] shadow hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    onClick={() => {
+                      localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+                      router.push("/");
+                    }}
+                    className="mt-4 bg-[#162C49] text-white text-sm px-5 py-2 rounded-2xl font-semibold border-2 border-[#162C49] shadow hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                  >
+                    + Add More Items
+                  </button>
+                </div>
+
+                {/* Step 1: Date Selection */}
+                {currentStep === 'dates' && (
+                  <>
+                    <div className="grid md:grid-cols-2 gap-8 mb-8">
+                      <div>
+                        <label className="block text-sm font-semibold text-[#162C49] mb-2">
+                          Pick-up Date
+                        </label>
+                        <input
+                          type="date"
+                          value={pickupDate}
+                          onChange={(e) => setPickupDate(e.target.value)}
+                          min={new Date().toISOString().split('T')[0]}
+                          className="w-full p-3 border-2 border-[#162C49]/30 rounded-2xl focus:ring-2 focus:ring-[#162C49] focus:border-[#162C49] bg-white/80 text-[#162C49] font-medium shadow"
+                          required
+                        />
                       </div>
-                      <div className="flex justify-between">
-                        <span className="font-semibold">Return Date:</span>
-                        <span>{returnDate}</span>
+                      <div>
+                        <label className="block text-sm font-semibold text-[#162C49] mb-2">
+                          Return Date
+                        </label>
+                        <input
+                          type="date"
+                          value={returnDate}
+                          onChange={(e) => setReturnDate(e.target.value)}
+                          min={pickupDate || new Date().toISOString().split('T')[0]}
+                          className="w-full p-3 border-2 border-[#162C49]/30 rounded-2xl focus:ring-2 focus:ring-[#162C49] focus:border-[#162C49] bg-white/80 text-[#162C49] font-medium shadow"
+                          required
+                        />
                       </div>
-                      <div className="flex justify-between">
-                        <span className="font-semibold">Number of Items:</span>
-                        <span>{selectedItems.length}</span>
+                    </div>
+
+                    <div className="flex justify-center">
+                      <button
+                        onClick={handleNextToSummary}
+                        className="bg-[#162C49] text-white py-3 px-12 rounded-2xl font-bold text-base shadow-xl border-2 border-[#162C49] hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                        disabled={selectedItems.length === 0}
+                      >
+                        Next
+                      </button>
+                    </div>
+                    {selectedItems.length === 0 && (
+                      <p className="text-[#162C49] mt-2 text-center">Please select at least one item to schedule.</p>
+                    )}
+                  </>
+                )}
+
+                {/* Step 2: Summary */}
+                {currentStep === 'summary' && (
+                  <>
+                    <div className="bg-[#162C49]/5 p-8 rounded-2xl mb-8 border-2 border-[#162C49] shadow-xl">
+                      <h3 className="font-bold mb-4 text-[#162C49] text-xl">Request Summary</h3>
+                      <div className="space-y-3 text-[#162C49]">
+                        <div className="flex justify-between">
+                          <span className="font-semibold">Pick-up Date:</span>
+                          <span>{pickupDate}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-semibold">Return Date:</span>
+                          <span>{returnDate}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-semibold">Number of Items:</span>
+                          <span>{selectedItems.length}</span>
+                        </div>
+                        <div className="border-t border-[#162C49]/20 pt-3">
+                          <span className="font-semibold">Selected Items:</span>
+                          <ul className="mt-2 space-y-1">
+                            {selectedItems.map((item) => (
+                              <li key={item.id} className="text-sm">• {item.article_type} ({item.property_no})</li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
-                      <div className="border-t border-primaryBlue/20 pt-3">
-                        <span className="font-semibold">Selected Items:</span>
-                        <ul className="mt-2 space-y-1">
+                    </div>
+
+                    <div className="flex space-x-4">
+                      <button
+                        onClick={handleBackToDates}
+                        className="flex-1 bg-[#162C49] text-white py-3 px-4 rounded-2xl font-semibold border-2 border-[#162C49] shadow-xl hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                      >
+                        Back
+                      </button>
+                      <button
+                        onClick={handleProceedToRequest}
+                        className="flex-1 bg-[#162C49] text-white py-3 px-4 rounded-2xl font-semibold border-2 border-[#162C49] shadow-xl hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                        disabled={selectedItems.length === 0}
+                      >
+                        Proceed to Request
+                      </button>
+                    </div>
+                    {selectedItems.length === 0 && (
+                      <p className="text-[#162C49] mt-2 text-center">Please select at least one item to schedule.</p>
+                    )}
+                  </>
+                )}
+
+                {/* Step 3: Submit Request */}
+                {currentStep === 'request' && (
+                  <>
+                    <div className="bg-[#162C49]/5 p-8 rounded-2xl mb-8 border-2 border-[#162C49] shadow-xl">
+                      <h3 className="font-bold mb-4 text-[#162C49] text-xl">Ready to Submit</h3>
+                      <p className="text-[#162C49] mb-4">Please review your request one final time before submitting to the admin.</p>
+                      <div className="space-y-2 text-sm text-[#162C49]">
+                        <div><strong>Pick-up Date:</strong> {pickupDate}</div>
+                        <div><strong>Return Date:</strong> {returnDate}</div>
+                        <div><strong>Items:</strong></div>
+                        <ul className="ml-4">
                           {selectedItems.map((item) => (
-                            <li key={item.id} className="text-sm">• {item.article_type} ({item.property_no})</li>
+                            <li key={item.id}>• {item.article_type} ({item.property_no})</li>
                           ))}
                         </ul>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="flex space-x-4">
-                    <button
-                      onClick={handleBackToDates}
-                      className="flex-1 bg-primaryRed text-white py-3 px-4 rounded-full font-semibold border-2 border-primaryRed shadow transition-all duration-200 hover:bg-white hover:text-primaryRed hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primaryRed/50"
-                    >
-                      Back
-                    </button>
-                    <button
-                      onClick={handleProceedToRequest}
-                      className="flex-1 bg-primaryBlue text-white py-3 px-4 rounded-full font-semibold border-2 border-primaryBlue shadow transition-all duration-200 hover:bg-white hover:text-primaryBlue hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primaryBlue/50"
-                      disabled={selectedItems.length === 0}
-                    >
-                      Proceed to Request
-                    </button>
-                  </div>
-                  {selectedItems.length === 0 && (
-                    <p className="text-primaryRed mt-2 text-center">Please select at least one item to schedule.</p>
-                  )}
-                </>
-              )}
-
-              {/* Step 3: Submit Request */}
-              {currentStep === 'request' && (
-                <>
-                  <div className="bg-primaryRed/5 p-8 rounded-2xl mb-8">
-                    <h3 className="font-bold mb-4 text-primaryRed text-xl">Ready to Submit</h3>
-                    <p className="text-primaryBlue mb-4">Please review your request one final time before submitting to the admin.</p>
-                    <div className="space-y-2 text-sm text-primaryBlue">
-                      <div><strong>Pick-up Date:</strong> {pickupDate}</div>
-                      <div><strong>Return Date:</strong> {returnDate}</div>
-                      <div><strong>Items:</strong></div>
-                      <ul className="ml-4">
-                        {selectedItems.map((item) => (
-                          <li key={item.id}>• {item.article_type} ({item.property_no})</li>
-                        ))}
-                      </ul>
+                    <div className="flex space-x-4">
+                      <button
+                        onClick={handleBackToDates}
+                        className="flex-1 bg-[#162C49] text-white py-3 px-4 rounded-2xl font-semibold border-2 border-[#162C49] shadow-xl hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                      >
+                        Back to Dates
+                      </button>
+                      <button
+                        onClick={handleRequest}
+                        disabled={loading}
+                        className="flex-1 bg-[#162C49] text-white py-3 px-4 rounded-2xl font-semibold border-2 border-[#162C49] shadow-xl hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50 disabled:bg-[#162C49]/30 disabled:cursor-not-allowed"
+                      >
+                        {loading ? "Submitting..." : "Submit Request to Admin"}
+                      </button>
                     </div>
-                  </div>
-
-                  <div className="flex space-x-4">
-                    <button
-                      onClick={handleBackToDates}
-                      className="flex-1 bg-primaryRed text-white py-3 px-4 rounded-full font-semibold border-2 border-primaryRed shadow transition-all duration-200 hover:bg-white hover:text-primaryRed hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primaryRed/50"
-                    >
-                      Back to Dates
-                    </button>
-                    <button
-                      onClick={handleRequest}
-                      disabled={loading}
-                      className="flex-1 bg-primaryBlue text-white py-3 px-4 rounded-full font-semibold border-2 border-primaryBlue shadow transition-all duration-200 hover:bg-white hover:text-primaryBlue hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primaryBlue/50 disabled:bg-primaryRed/30 disabled:cursor-not-allowed"
-                    >
-                      {loading ? "Submitting..." : "Submit Request to Admin"}
-                    </button>
-                  </div>
-                </>
-              )}
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>

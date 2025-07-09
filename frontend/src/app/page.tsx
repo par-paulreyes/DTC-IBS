@@ -162,18 +162,43 @@ export default function HomePage() {
         <Navbar />
         <div className="max-w-6xl mx-auto px-4 py-12 flex-1">
           <div className="mb-10">
-            <h1 className="text-4xl font-extrabold text-primaryBlue mb-2 tracking-tight drop-shadow-lg">Inventory Items</h1>
-            <p className="text-lg text-primaryRed font-medium">Select items you want to borrow</p>
+            {/* Status Legend with Inventory Items */}
+            <div className="bg-white/90 border-l-6 border-[#162C49] border-2 border-black rounded-2xl p-6 shadow-xl">
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h1 className="text-4xl font-extrabold text-primaryBlue mb-2 tracking-tight drop-shadow-lg">Inventory Items</h1>
+                  <p className="text-lg text-[#162C49] font-medium">Select items you want to borrow</p>
+                </div>
+                
+                <div>
+                  <h3 className="text-sm font-semibold text-[#162C49] mb-3">Status Legend</h3>
+                                    <div className="flex gap-6">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 bg-green-600 rounded-full"></span>
+                      <span className="text-xs text-gray-700">Available</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 bg-yellow-200 rounded-full"></span>
+                      <span className="text-xs text-gray-700">To be Borrowed</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 bg-[#162C49] rounded-full"></span>
+                      <span className="text-xs text-gray-700">Borrowed</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {error && (
-            <div className="bg-primaryRed/10 border border-primaryRed text-primaryRed px-4 py-3 rounded-xl mb-6 shadow-md">
+            <div className="bg-red-50 border border-red-400 text-red-800 px-4 py-3 rounded-lg mb-6 shadow-md">
               {error}
             </div>
           )}
 
           {/* Filters */}
-          <div className="bg-white/80 rounded-3xl shadow-xl p-8 mb-10 border-l-8 border-primaryRed">
+          <div className="bg-white/90 rounded-2xl shadow-xl p-8 mb-10 border-l-6 border-[#162C49] border-2 border-black">
             <h2 className="text-xl font-bold text-primaryBlue mb-6">Filters</h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               {/* Search */}
@@ -184,7 +209,7 @@ export default function HomePage() {
                   placeholder="Search items..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-2 border-2 border-primaryRed rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryRed/60 bg-white/60 text-primaryBlue font-medium transition"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#162C49]/60 focus:border-[#162C49] bg-white text-primaryBlue font-medium transition-all duration-300 hover:border-[#162C49]"
                 />
               </div>
 
@@ -194,7 +219,7 @@ export default function HomePage() {
                 <select
                   value={articleTypeFilter}
                   onChange={(e) => setArticleTypeFilter(e.target.value)}
-                  className="w-full px-4 py-2 border-2 border-primaryRed rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryRed/60 bg-white/60 text-primaryBlue font-medium transition"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#162C49]/60 focus:border-[#162C49] bg-white text-primaryBlue font-medium transition-all duration-300 hover:border-[#162C49]"
                 >
                   <option value="">All Types</option>
                   <option value="laptop">Laptop</option>
@@ -212,7 +237,7 @@ export default function HomePage() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full px-4 py-2 border-2 border-primaryRed rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryRed/60 bg-white/60 text-primaryBlue font-medium transition"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#162C49]/60 focus:border-[#162C49] bg-white text-primaryBlue font-medium transition-all duration-300 hover:border-[#162C49]"
                 >
                   <option value="">All Status</option>
                   <option value="Available">Available</option>
@@ -225,7 +250,8 @@ export default function HomePage() {
               <div className="flex items-end">
                 <button
                   onClick={clearFilters}
-                  className="w-full px-4 py-2 bg-primaryRed text-white rounded-xl font-bold shadow-lg border-2 border-primaryRed hover:bg-primaryBlue hover:border-primaryBlue hover:scale-105 transition-all duration-200"
+                  className="w-full px-5 py-2 bg-[#162C49] text-white !important rounded-lg font-semibold shadow-md border border-[#162C49] hover:bg-[#0F1F35] hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer"
+                  style={{ color: 'white' }}
                 >
                   Clear Filters
                 </button>
@@ -235,19 +261,20 @@ export default function HomePage() {
 
           {/* Selected Items Display */}
           {selectedItems.size > 0 && (
-            <div className="bg-primaryBlue/10 border-l-8 border-primaryBlue rounded-3xl p-6 mb-8 shadow-xl">
-              <h2 className="text-2xl font-bold text-primaryRed mb-4">Selected Items ({selectedItems.size})</h2>
+            <div className="bg-blue-50/80 border-l-6 border-[#162C49] border-2 border-black rounded-2xl p-6 mb-8 shadow-xl">
+              <h2 className="text-2xl font-bold text-[#162C49] mb-4">Selected Items ({selectedItems.size})</h2>
               <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                 {getSelectedItems().map((item) => (
-                  <div key={item.id} className="bg-white/90 rounded-2xl p-3 border-l-4 border-primaryBlue shadow-md flex flex-col gap-1">
+                  <div key={item.id} className="bg-white/95 rounded-2xl p-4 border-l-4 border-[#162C49] border-2 border-black shadow-xl flex flex-col gap-2 hover:translate-y-[-2px] hover:shadow-2xl transition-all duration-300">
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="font-semibold text-primaryBlue">{item.article_type}</h3>
-                        <p className="text-xs text-primaryRed">Property No: {item.property_no}</p>
+                        <p className="text-xs text-[#162C49]">Property No: {item.property_no}</p>
                       </div>
                       <button
                         onClick={() => handleItemToggle(item.id)}
-                        className="text-primaryRed hover:text-primaryBlue text-xs font-bold px-2 py-1 rounded-lg bg-primaryRed/10 hover:bg-primaryBlue/10 border-2 border-primaryRed hover:border-primaryBlue transition"
+                        className="text-white !important text-xs font-semibold px-3 py-1 rounded-lg bg-[#162C49] hover:bg-[#0F1F35] border border-[#162C49] transition-all duration-300 ease-in-out cursor-pointer"
+                        style={{ color: 'white' }}
                       >
                         Remove
                       </button>
@@ -255,10 +282,11 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 pt-3 border-t border-primaryBlue flex justify-end">
+              <div className="mt-4 pt-3 border-t border-[#162C49] flex justify-end">
                 <button
                   onClick={handleProceedToSchedule}
-                  className="bg-primaryBlue text-white py-2 px-6 rounded-2xl font-bold shadow-xl border-2 border-primaryBlue hover:bg-primaryRed hover:border-primaryRed hover:scale-105 transition-all duration-200 text-base tracking-wide"
+                  className="bg-[#162C49] text-white !important py-2 px-6 rounded-lg font-semibold shadow-md border border-[#162C49] hover:bg-[#0F1F35] hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer text-base tracking-wide"
+                  style={{ color: 'white' }}
                 >
                   Proceed to Schedule ({selectedItems.size} items)
                 </button>
@@ -273,26 +301,26 @@ export default function HomePage() {
           ) : (
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {filteredItems.map((item) => (
-                <div key={item.id} className="bg-white/90 rounded-3xl shadow-2xl p-5 hover:shadow-primaryRed/30 border-l-8 border-primaryRed transition-all duration-200 flex flex-col gap-1">
+                <div key={item.id} className="bg-white/95 rounded-2xl shadow-xl p-5 hover:translate-y-[-2px] hover:shadow-2xl border-l-6 border-[#162C49] border-2 border-black transition-all duration-300 flex flex-col gap-2 group hover:scale-[1.01]">
                   <div className="flex items-start gap-3 mb-2">
                     <input
                       type="checkbox"
                       checked={selectedItems.has(item.id)}
                       onChange={() => handleItemToggle(item.id)}
-                      className="mt-1 h-4 w-4 accent-primaryRed focus:ring-primaryBlue border-primaryRed rounded-xl shadow-sm"
+                      className="mt-1 h-4 w-4 accent-[#162C49] focus:ring-[#162C49] border-[#162C49] rounded shadow-sm"
                       disabled={item.item_status !== 'Available'}
                     />
                     <div className="flex-1">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="text-base font-bold text-primaryBlue mb-0.5">{item.article_type}</h3>
-                          <p className="text-xs text-primaryRed">Property No: {item.property_no}</p>
+                          <h3 className="text-base font-bold text-primaryBlue mb-1 group-hover:text-[#162C49] transition-colors duration-300">{item.article_type}</h3>
+                          <p className="text-xs text-[#162C49]">Property No: {item.property_no}</p>
                         </div>
-                        <span className={`px-4 py-1 rounded-full text-xs font-bold shadow-md border-2 transition-all duration-200
-                          ${item.item_status === 'Available' ? 'bg-primaryBlue text-white border-primaryBlue' :
-                            item.item_status === 'Borrowed' ? 'bg-primaryRed text-white border-primaryRed' :
-                            item.item_status === 'To be Borrowed' ? 'bg-yellow-500 text-yellow-900 border-yellow-500' :
-                            'bg-gray-100 text-gray-500 border-gray-300'}
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold shadow-sm border transition-all duration-300
+                          ${item.item_status === 'Available' ? 'bg-green-600 text-black border-green-600' :
+                            item.item_status === 'Borrowed' ? 'bg-[#162C49] text-white border-[#162C49]' :
+                            item.item_status === 'To be Borrowed' ? 'bg-yellow-200 text-black border-yellow-200' :
+                            'bg-gray-300 text-gray-600 border-gray-300'}
                         `}>
                           {item.item_status || 'Available'}
                         </span>
@@ -300,15 +328,16 @@ export default function HomePage() {
                     </div>
                   </div>
                   {item.specifications && (
-                    <p className="text-xs text-primaryBlue/80 mb-1">{item.specifications}</p>
+                    <p className="text-xs text-primaryBlue/80 mb-1 bg-blue-50/50 p-2 rounded">{item.specifications}</p>
                   )}
                   {item.location && (
-                    <p className="text-xs text-primaryRed/80 mb-1">Location: {item.location}</p>
+                    <p className="text-xs text-[#162C49]/80 mb-1 bg-blue-50/50 p-2 rounded">📍 Location: {item.location}</p>
                   )}
-                  <div className="flex justify-between items-center mt-3 pt-2 border-t border-primaryRed">
+                  <div className="flex justify-between items-center mt-3 pt-2 border-t border-[#162C49]">
                     <button
                       onClick={() => handleShowDetails(item)}
-                      className="text-primaryBlue hover:text-primaryRed text-xs font-bold px-2 py-1 rounded-lg bg-primaryBlue/10 hover:bg-primaryRed/10 border-2 border-primaryBlue hover:border-primaryRed transition"
+                      className="text-[#162C49] !important text-xs font-semibold px-3 py-2 rounded-lg bg-transparent hover:bg-[#162C49] hover:!text-white border border-[#162C49] transition-all duration-300 ease-in-out cursor-pointer"
+                      style={{ color: '#162C49' }}
                     >
                       Show Details
                     </button>
@@ -333,42 +362,42 @@ export default function HomePage() {
         {/* Item Details Modal */}
         {showDetailsModal && selectedItemDetails && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50" aria-modal="true" role="dialog">
-            <div className="bg-white rounded-3xl p-8 w-full max-w-md mx-4 shadow-2xl border-l-8 border-primaryRed">
+            <div className="bg-white rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl border-l-6 border-[#162C49] border-2 border-black">
               <h2 className="text-2xl font-extrabold mb-6 text-primaryBlue">Item Details</h2>
               <div className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-primaryRed">Article Type</label>
+                <div className="bg-blue-50/30 p-3 rounded-lg">
+                  <label className="block text-xs font-semibold text-[#162C49]">Article Type</label>
                   <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.article_type}</p>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold text-primaryRed">Property No</label>
+                <div className="bg-blue-50/30 p-3 rounded-lg">
+                  <label className="block text-xs font-semibold text-[#162C49]">Property No</label>
                   <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.property_no}</p>
                 </div>
                 {selectedItemDetails.qr_code && (
-                  <div>
-                    <label className="block text-xs font-semibold text-primaryRed">QR Code</label>
+                  <div className="bg-blue-50/30 p-3 rounded-lg">
+                    <label className="block text-xs font-semibold text-[#162C49]">QR Code</label>
                     <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.qr_code}</p>
                   </div>
                 )}
                 {selectedItemDetails.location && (
-                  <div>
-                    <label className="block text-xs font-semibold text-primaryRed">Location</label>
+                  <div className="bg-blue-50/30 p-3 rounded-lg">
+                    <label className="block text-xs font-semibold text-[#162C49]">Location</label>
                     <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.location}</p>
                   </div>
                 )}
                 {selectedItemDetails.specifications && (
-                  <div>
-                    <label className="block text-xs font-semibold text-primaryRed">Specifications</label>
+                  <div className="bg-blue-50/30 p-3 rounded-lg">
+                    <label className="block text-xs font-semibold text-[#162C49]">Specifications</label>
                     <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.specifications}</p>
                   </div>
                 )}
-                <div>
-                  <label className="block text-xs font-semibold text-primaryRed">Status</label>
+                <div className="bg-blue-50/30 p-3 rounded-lg">
+                  <label className="block text-xs font-semibold text-[#162C49]">Status</label>
                   <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.item_status || 'Available'}</p>
                 </div>
                 {selectedItemDetails.remarks && (
-                  <div>
-                    <label className="block text-xs font-semibold text-primaryRed">Remarks</label>
+                  <div className="bg-blue-50/30 p-3 rounded-lg">
+                    <label className="block text-xs font-semibold text-[#162C49]">Remarks</label>
                     <p className="text-base text-primaryBlue font-bold">{selectedItemDetails.remarks}</p>
                   </div>
                 )}
@@ -376,7 +405,8 @@ export default function HomePage() {
               <div className="flex justify-end mt-8">
                 <button
                   onClick={closeDetailsModal}
-                  className="px-6 py-2 bg-primaryBlue text-white rounded-xl font-bold shadow-lg border-2 border-primaryBlue hover:bg-primaryRed hover:border-primaryRed hover:scale-105 transition-all duration-200"
+                  className="px-6 py-2 bg-[#162C49] text-white !important rounded-lg font-semibold shadow-md border border-[#162C49] hover:bg-[#0F1F35] hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer"
+                  style={{ color: 'white' }}
                 >
                   Close
                 </button>
