@@ -52,6 +52,8 @@ export default function AdminPage() {
   const [viewItems, setViewItems] = useState<{ logId: number, items: Item[] } | null>(null);
   const [deleteLogId, setDeleteLogId] = useState<number | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [logsFilter, setLogsFilter] = useState<string>("all");
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
@@ -91,6 +93,24 @@ export default function AdminPage() {
     fetchAllRequests();
     fetchAllLogs();
   }, [fetchAllRequests, fetchAllLogs]);
+
+  // Close filter dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest('.filter-dropdown')) {
+        setShowFilterDropdown(false);
+      }
+    };
+
+    if (showFilterDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFilterDropdown]);
 
   const handleApprove = async (id: number) => {
     // Get items for this request
@@ -350,6 +370,27 @@ export default function AdminPage() {
     setViewItems(null);
   };
 
+  const getFilteredLogs = () => {
+    if (logsFilter === "all") {
+      return logs;
+    }
+    return logs.filter(log => {
+      const status = log.status.toLowerCase();
+      switch (logsFilter) {
+        case "borrowed":
+          return status === "borrowed" || status === "approved" || status === "to be borrowed";
+        case "declined":
+          return status === "declined";
+        case "returned":
+          return status === "returned";
+        case "cancelled":
+          return status === "cancelled" || status === "declined";
+        default:
+          return true;
+      }
+    });
+  };
+
   // Mobile card component for requests
   const renderMobileCard = (request: BorrowRequest, type: string) => (
     <div key={request.id} className="bg-white rounded-xl shadow-md border border-[#162C49]/10 p-4 mb-4">
@@ -576,6 +617,60 @@ export default function AdminPage() {
     </div>
   );
 
+  const renderLogsFilter = () => (
+    <div className="mb-4 relative">
+              <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold text-[#162C49]">All Logs</h3>
+            <p className="text-sm text-[#162C49]/70">
+              Showing {getFilteredLogs().length} of {logs.length} logs
+            </p>
+          </div>
+        <div className="relative filter-dropdown">
+          <button
+            onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+            className="flex items-center space-x-2 bg-[#162C49] text-white px-4 py-2 rounded-lg hover:bg-[#0F1F35] transition-colors text-sm font-medium"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            <span>{logsFilter === "all" ? "Filter" : logsFilter.charAt(0).toUpperCase() + logsFilter.slice(1)}</span>
+            <svg className={`w-4 h-4 transition-transform ${showFilterDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          
+          {showFilterDropdown && (
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-[#162C49]/20 z-10">
+              <div className="py-1">
+                {[
+                  { value: "all", label: "All Logs" },
+                  { value: "borrowed", label: "Borrowed" },
+                  { value: "declined", label: "Declined" },
+                  { value: "returned", label: "Returned" },
+                  { value: "cancelled", label: "Cancelled" }
+                ].map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() => {
+                      setLogsFilter(option.value);
+                      setShowFilterDropdown(false);
+                    }}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-[#162C49]/5 transition-colors ${
+                      logsFilter === option.value ? 'bg-[#162C49]/10 text-[#162C49] font-medium' : 'text-[#162C49]/70'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <AuthGuard requireAdmin>
       <div className="min-h-screen bg-[#e9ecf4] flex flex-col">
@@ -660,7 +755,12 @@ export default function AdminPage() {
                   {tab === "pending" && renderTable(pending, "pending")}
                   {tab === "approved" && renderTable(approved, "approved")}
                   {tab === "borrowed" && renderTable(borrowed, "borrowed")}
-                  {tab === "logs" && (logs.length > 0 ? renderTable(logs, "logs") : renderEmptyState("No logs found"))}
+                  {tab === "logs" && (
+                    <>
+                      {renderLogsFilter()}
+                      {getFilteredLogs().length > 0 ? renderTable(getFilteredLogs(), "logs") : renderEmptyState("No logs found")}
+                    </>
+                  )}
                 </>
               )}
             </div>
