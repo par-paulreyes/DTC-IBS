@@ -125,24 +125,24 @@ export default function MyBorrowItemsPage() {
             <div className="bg-white/90 border-l-6 border-[#162C49] border-2 border-black rounded-2xl p-4 sm:p-6 shadow-xl">
               <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-2 gap-4">
                 <div>
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#162C49] mb-2 tracking-tight drop-shadow-lg">My Borrow Items</h1>
-                  <p className="text-base sm:text-lg text-[#162C49] font-medium">Track your item borrowing requests</p>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-[#162C49] mb-1 tracking-tight">My Borrow Items</h1>
+                  <p className="text-base text-[#162C49] font-medium">Track your item borrowing requests</p>
                 </div>
                 {/* Legend */}
                 <div className="lg:text-right">
-                  <h3 className="text-sm font-semibold text-[#162C49] mb-3">Status Legend</h3>
+                  <h3 className="text-lg font-semibold text-[#162C49] mb-2">Status Legend</h3>
                   <div className="flex flex-wrap gap-3 sm:gap-6">
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 bg-green-600 rounded-full"></span>
-                      <span className="text-xs text-gray-700">Approved</span>
+                      <span className="text-sm text-gray-700 font-normal">Approved</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 bg-yellow-200 rounded-full"></span>
-                      <span className="text-xs text-gray-700">Declined</span>
+                      <span className="text-sm text-gray-700 font-normal">Declined</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 bg-[#162C49] rounded-full"></span>
-                      <span className="text-xs text-gray-700">Cancelled</span>
+                      <span className="text-sm text-gray-700 font-normal">Cancelled</span>
                     </div>
                   </div>
                 </div>
@@ -169,7 +169,7 @@ export default function MyBorrowItemsPage() {
             <div className="flex flex-col lg:flex-row gap-8">
               {/* Left: My Borrow Requests */}
               <div className="flex-1">
-                <h2 className="text-2xl font-bold text-[#162C49] mb-6">My Borrow Requests</h2>
+                <h2 className="text-lg font-semibold text-[#162C49] mb-6">My Borrow Requests</h2>
                 <div className="grid gap-8">
                   {topRequests
                     .map((request) => (
@@ -192,11 +192,11 @@ export default function MyBorrowItemsPage() {
                             </div>
                             <div className="grid md:grid-cols-2 gap-6 text-sm mb-4">
                               <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
-                                <div className="font-bold text-[#162C49] mb-1">Pick-up Date</div>
+                                <div className="font-semibold text-[#162C49] mb-1">Pick-up Date</div>
                                 <div className="text-[#162C49]">{formatDate(request.pickup_date)}</div>
                               </div>
                               <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
-                                <div className="font-bold text-[#162C49] mb-1">Return Date</div>
+                                <div className="font-semibold text-[#162C49] mb-1">Return Date</div>
                                 <div className="text-[#162C49]">{formatDate(request.return_date)}</div>
                               </div>
                             </div>
@@ -226,7 +226,7 @@ export default function MyBorrowItemsPage() {
               </div>
               {/* Right: Returned Items */}
               <div className="flex-1">
-                <h2 className="text-2xl font-bold text-[#162C49] mb-6">Returned Items</h2>
+                <h2 className="text-lg font-semibold text-[#162C49] mb-6">Returned Items</h2>
                 <div className="grid gap-8">
                   {requests.filter(r => r.status === 'returned').map((request) => (
                     <div key={request.id} className="bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-xl p-3 border-l-8 border-gray-400 border-2 border-gray-300 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02]">

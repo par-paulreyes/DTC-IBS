@@ -675,9 +675,9 @@ export default function AdminPage() {
     <AuthGuard requireAdmin>
       <div className="min-h-screen bg-[#e9ecf4] flex flex-col">
         <Navbar />
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-10 flex-1 w-full">
-          <div className="mb-4 sm:mb-6 lg:mb-8">
-            <h1 className="text-xl sm:text-2xl lg:text-4xl font-extrabold text-[#162C49] mb-2 tracking-tight drop-shadow-lg">Admin Dashboard</h1>
+        <div className="max-w-[1300px] mx-auto px-3 sm:px-5 lg:px-7 py-4 sm:py-6 lg:py-9 flex-1 w-full">
+          <div className="mb-3 sm:mb-5 lg:mb-7">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#162C49] mb-1 tracking-tight">Admin Panel</h1>
           </div>
 
           {error && (

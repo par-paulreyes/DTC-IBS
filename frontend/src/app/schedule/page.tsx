@@ -128,11 +128,11 @@ export default function SchedulePage() {
       <div className="min-h-screen bg-white flex flex-col">
         <Navbar />
         <div className="flex-1">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 lg:py-10">
-            <div className="bg-white/90 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 border-l-8 border-[#162C49] border-2 border-black">
-              <div className="mb-6 sm:mb-8 flex flex-col items-center">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#162C49] mb-2 tracking-tight drop-shadow-lg text-center">Schedule Items</h1>
-                <p className="text-base sm:text-lg font-semibold text-[#162C49] text-center">Select dates and submit your borrow request</p>
+          <div className="max-w-5xl mx-auto px-2 sm:px-4 py-4 sm:py-6 lg:py-8">
+            <div className="bg-white/90 rounded-2xl shadow-xl p-3 sm:p-4 lg:p-6 border-l-8 border-[#162C49] border-2 border-black">
+              <div className="mb-4 sm:mb-6 flex flex-col items-center">
+                <h1 className="text-2xl sm:text-3xl font-bold text-[#162C49] mb-1 tracking-tight text-center">Schedule Items</h1>
+                <p className="text-base text-[#162C49] font-medium text-center">Select dates and submit your borrow request</p>
               </div>
 
               {/* Progress Steps */}
@@ -145,7 +145,7 @@ export default function SchedulePage() {
                     >
                       {idx + 1}
                     </div>
-                    <span className={`mt-1 sm:mt-2 text-xs sm:text-sm font-semibold text-center ${currentStep === (idx === 0 ? 'dates' : idx === 1 ? 'summary' : 'request') ? 'text-[#162C49]' : 'text-[#162C49] opacity-60'}`}>{label}</span>
+                    <span className={`mt-1 sm:mt-2 text-sm font-normal text-center ${currentStep === (idx === 0 ? 'dates' : idx === 1 ? 'summary' : 'request') ? 'text-[#162C49]' : 'text-[#162C49] opacity-60'}`}>{label}</span>
                   </div>
                 ))}
               </div>
@@ -169,10 +169,10 @@ export default function SchedulePage() {
               )}
 
               {/* Main Schedule Container */}
-              <div className="relative rounded-2xl shadow-xl mb-8 border-2 border-[#162C49] bg-white/95 p-6">
+              <div className="relative rounded-2xl shadow-xl mb-6 border-2 border-[#162C49] bg-white/95 p-4">
                 {/* Selected Items - Always Visible */}
                 <div className="mb-8">
-                  <h2 className="text-2xl font-bold mb-4 text-[#162C49]">Selected Items</h2>
+                  <h2 className="text-lg font-semibold mb-4 text-[#162C49]">Selected Items</h2>
                   {selectedItems.length === 0 ? (
                     <>
                       <p className="text-[#162C49]">No items selected</p>
@@ -185,10 +185,10 @@ export default function SchedulePage() {
                       {selectedItems.map((item) => (
                         <div key={item.id} className="flex justify-between items-center p-3 bg-[#162C49]/10 rounded-2xl border-2 border-[#162C49] shadow">
                           <div>
-                            <h3 className="font-semibold text-[#162C49]">{item.article_type}</h3>
-                            <p className="text-xs text-[#162C49]">Property No: {item.property_no}</p>
+                            <h3 className="font-medium text-[#162C49]">{item.article_type}</h3>
+                            <p className="text-sm text-[#162C49]">Property No: {item.property_no}</p>
                             {item.specifications && (
-                              <p className="text-xs text-[#162C49]">{item.specifications}</p>
+                              <p className="text-sm text-[#162C49]">{item.specifications}</p>
                             )}
                           </div>
                           <button
