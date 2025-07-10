@@ -129,7 +129,7 @@ export default function SchedulePage() {
         <Navbar />
         <div className="flex-1">
           <div className="max-w-5xl mx-auto px-2 sm:px-4 py-4 sm:py-6 lg:py-8">
-            <div className="bg-white/90 rounded-2xl shadow-xl p-3 sm:p-4 lg:p-6 border-l-8 border-[#162C49] border-2 border-black">
+            <div className="bg-white/90 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 border-l-8 border-[#162C49] border-2 border-black">
               <div className="mb-4 sm:mb-6 flex flex-col items-center">
                 <h1 className="text-2xl sm:text-3xl font-bold text-[#162C49] mb-1 tracking-tight text-center">Schedule Items</h1>
                 <p className="text-base text-[#162C49] font-medium text-center">Select dates and submit your borrow request</p>
@@ -137,11 +137,15 @@ export default function SchedulePage() {
 
               {/* Progress Steps */}
               <div className="mb-6 sm:mb-8 flex items-center justify-center gap-4 sm:gap-6 lg:gap-8">
-                {["Select Dates", "Review Summary", "Submit Request"].map((label, idx) => (
+                {[
+                  "Select Dates",
+                  "Review Summary",
+                  "Submit Request"
+                ].map((label, idx) => (
                   <div key={label} className="flex flex-col items-center">
                     <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border-2 shadow-xl font-bold text-sm sm:text-lg transition-all duration-300
                       ${currentStep === (idx === 0 ? 'dates' : idx === 1 ? 'summary' : 'request')
-                        ? 'bg-[#162C49] border-[#162C49] text-white scale-110' : 'bg-white border-[#162C49] text-[#162C49] opacity-60'}`}
+                        ? 'bg-[#162C49] border-[#162C49] text-white scale-105' : 'bg-white border-[#162C49] text-[#162C49] opacity-60'}`}
                     >
                       {idx + 1}
                     </div>
@@ -169,7 +173,7 @@ export default function SchedulePage() {
               )}
 
               {/* Main Schedule Container */}
-              <div className="relative rounded-2xl shadow-xl mb-6 border-2 border-[#162C49] bg-white/95 p-4">
+              <div className="relative rounded-2xl shadow-xl mb-6 border-2 border-[#162C49] bg-white/95 p-4 sm:p-6">
                 {/* Selected Items - Always Visible */}
                 <div className="mb-8">
                   <h2 className="text-lg font-semibold mb-4 text-[#162C49]">Selected Items</h2>
@@ -193,7 +197,7 @@ export default function SchedulePage() {
                           </div>
                           <button
                             onClick={() => handleRemoveItem(item.id)}
-                            className="ml-4 bg-[#162C49] text-white text-xs rounded-2xl px-4 py-2 border-2 border-[#162C49] shadow hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                            className="ml-4 bg-[#162C49] text-white text-xs rounded-2xl px-4 py-2 border-2 border-[#162C49] shadow hover:bg-[#0F1F35] hover:scale-104 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
                           >
                             Remove
                           </button>
@@ -206,7 +210,7 @@ export default function SchedulePage() {
                       localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
                       router.push("/");
                     }}
-                    className="mt-4 bg-[#162C49] text-white text-sm px-5 py-2 rounded-2xl font-semibold border-2 border-[#162C49] shadow hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                    className="mt-4 bg-[#162C49] text-white text-sm px-5 py-2 rounded-2xl font-semibold border-2 border-[#162C49] shadow hover:bg-[#0F1F35] hover:scale-104 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
                   >
                     + Add More Items
                   </button>
@@ -247,7 +251,7 @@ export default function SchedulePage() {
                     <div className="flex justify-center">
                       <button
                         onClick={handleNextToSummary}
-                        className="bg-[#162C49] text-white py-3 px-12 rounded-2xl font-bold text-base shadow-xl border-2 border-[#162C49] hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                        className="bg-[#162C49] text-white py-3 px-12 rounded-2xl font-bold text-base shadow-xl border-2 border-[#162C49] hover:bg-[#0F1F35] hover:scale-104 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
                         disabled={selectedItems.length === 0}
                       >
                         Next
@@ -291,13 +295,13 @@ export default function SchedulePage() {
                     <div className="flex space-x-4">
                       <button
                         onClick={handleBackToDates}
-                        className="flex-1 bg-[#162C49] text-white py-3 px-4 rounded-2xl font-semibold border-2 border-[#162C49] shadow-xl hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                        className="flex-1 bg-[#162C49] text-white py-3 px-4 rounded-2xl font-semibold border-2 border-[#162C49] shadow-xl hover:bg-[#0F1F35] hover:scale-104 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
                       >
                         Back
                       </button>
                       <button
                         onClick={handleProceedToRequest}
-                        className="flex-1 bg-[#162C49] text-white py-3 px-4 rounded-2xl font-semibold border-2 border-[#162C49] shadow-xl hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                        className="flex-1 bg-[#162C49] text-white py-3 px-4 rounded-2xl font-semibold border-2 border-[#162C49] shadow-xl hover:bg-[#0F1F35] hover:scale-104 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
                         disabled={selectedItems.length === 0}
                       >
                         Proceed to Request
@@ -330,14 +334,14 @@ export default function SchedulePage() {
                     <div className="flex space-x-4">
                       <button
                         onClick={handleBackToDates}
-                        className="flex-1 bg-[#162C49] text-white py-3 px-4 rounded-2xl font-semibold border-2 border-[#162C49] shadow-xl hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
+                        className="flex-1 bg-[#162C49] text-white py-3 px-4 rounded-2xl font-semibold border-2 border-[#162C49] shadow-xl hover:bg-[#0F1F35] hover:scale-104 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50"
                       >
                         Back to Dates
                       </button>
                       <button
                         onClick={handleRequest}
                         disabled={loading}
-                        className="flex-1 bg-[#162C49] text-white py-3 px-4 rounded-2xl font-semibold border-2 border-[#162C49] shadow-xl hover:bg-[#0F1F35] hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50 disabled:bg-[#162C49]/30 disabled:cursor-not-allowed"
+                        className="flex-1 bg-[#162C49] text-white py-3 px-4 rounded-2xl font-semibold border-2 border-[#162C49] shadow-xl hover:bg-[#0F1F35] hover:scale-104 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#162C49]/50 disabled:bg-[#162C49]/30 disabled:cursor-not-allowed"
                       >
                         {loading ? "Submitting..." : "Submit Request to Admin"}
                       </button>
