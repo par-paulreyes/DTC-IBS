@@ -33,14 +33,11 @@ export default function HomePage() {
 
   useEffect(() => {
     // Load selectedItems from localStorage
-    const selectedItemsStr = localStorage.getItem("selectedItems");
+    const selectedArr = JSON.parse(localStorage.getItem("selectedItems") || "[]") as { id: number }[];
     let selectedSet = new Set<number>();
-    if (selectedItemsStr) {
+    if (selectedArr) {
       try {
-        const selectedArr = JSON.parse(selectedItemsStr);
-        if (Array.isArray(selectedArr)) {
-          selectedSet = new Set(selectedArr.map((item: any) => item.id));
-        }
+        selectedSet = new Set(selectedArr.map((item) => item.id));
       } catch {}
     }
     setSelectedItems(selectedSet);
@@ -64,15 +61,15 @@ export default function HomePage() {
         );
         setItems(data);
         setFilteredItems(data);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
       }
     };
 
     fetchItems();
-  }, []);
+  }, [apiUrl]);
 
   // Apply filters whenever search term, article type filter, or status filter changes
   useEffect(() => {

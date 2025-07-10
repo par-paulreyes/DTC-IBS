@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaBoxOpen, FaMapMarkerAlt, FaEnvelope, FaPhone } from "react-icons/fa";
+import { FaMapMarkerAlt, FaEnvelope, FaPhone } from "react-icons/fa";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -40,8 +41,8 @@ export default function LoginPage() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       router.push("/");
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred. Please try again.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -55,7 +56,7 @@ export default function LoginPage() {
         <div className="relative z-10 flex flex-col justify-center h-full px-8 lg:px-12 max-w-2xl">
           {/* Logo and Title Section - One Line */}
           <div className="flex items-center gap-4 mb-8">
-          <img src="/dtc-logo.jpg" alt="DTC Logo" className="w-24 h-24 lg:w-28 lg:h-28 object-cover shadow-lg border-2 border-white flex-shrink-0" />
+            <Image src="/dtc-logo.jpg" alt="DTC Logo" width={112} height={112} className="w-24 h-24 lg:w-28 lg:h-28 object-cover shadow-lg border-2 border-white flex-shrink-0" />
             <div className="flex flex-col">
               <h1 className="text-3xl lg:text-4xl font-bold !text-white leading-tight">Digital Transformation Center</h1>
               <h2 className="text-xl lg:text-2xl font-semibold !text-white leading-tight">Inventory Access System</h2>

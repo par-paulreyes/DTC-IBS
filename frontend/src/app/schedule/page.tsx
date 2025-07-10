@@ -25,6 +25,7 @@ export default function SchedulePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  
   const router = useRouter();
 
   useEffect(() => {
@@ -80,8 +81,8 @@ export default function SchedulePage() {
         router.push("/my-borrow-items");
       }, 2000);
 
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -91,10 +92,6 @@ export default function SchedulePage() {
     const updated = selectedItems.filter(item => item.id !== itemId);
     setSelectedItems(updated);
     localStorage.setItem("selectedItems", JSON.stringify(updated));
-  };
-
-  const addMoreItems = () => {
-    router.push("/");
   };
 
   const handleNextToSummary = () => {

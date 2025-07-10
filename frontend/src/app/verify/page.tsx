@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function VerifyPage() {
+function VerifyContent() {
   const [message, setMessage] = useState("Verifying...");
   const [error, setError] = useState("");
   const searchParams = useSearchParams();
@@ -39,5 +39,13 @@ export default function VerifyPage() {
         {error && <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-700">{error}</div>}
       </div>
     </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense>
+      <VerifyContent />
+    </Suspense>
   );
 }

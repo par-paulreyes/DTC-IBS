@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { FaHome, FaCalendarAlt, FaBoxOpen, FaSignOutAlt, FaUserCog } from "react-icons/fa";
+import { FaHome, FaCalendarAlt, FaSignOutAlt, FaUserCog, FaBoxOpen } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
 interface User {

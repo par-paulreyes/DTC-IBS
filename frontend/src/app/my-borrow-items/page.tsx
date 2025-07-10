@@ -1,6 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "../../components/Navbar";
 import AuthGuard from "../../components/AuthGuard";
 
@@ -18,27 +17,9 @@ export default function MyBorrowItemsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [itemDetails, setItemDetails] = useState<Record<number, { id: number; article_type: string }>>({});
-  const router = useRouter();
-  const [statusFilter, setStatusFilter] = useState("");
-
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  useEffect(() => {
-    // After requests are loaded, fetch all unique item details
-    if (requests.length > 0) {
-      const allItemIds = Array.from(new Set(requests.flatMap(r => parseItemIds(r.item_ids))));
-      if (allItemIds.length > 0) {
-        fetchItemDetails(allItemIds);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requests]);
-
-  const fetchRequests = async () => {
+  const fetchRequests = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(`${apiUrl}/api/borrow`, {
@@ -53,14 +34,14 @@ export default function MyBorrowItemsPage() {
 
       const data = await response.json();
       setRequests(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiUrl]);
 
-  const fetchItemDetails = async (ids: number[]) => {
+  const fetchItemDetails = useCallback(async (ids: number[]) => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(`${apiUrl}/api/items/details`, {
@@ -71,15 +52,29 @@ export default function MyBorrowItemsPage() {
       if (response.ok) {
         const details = await response.json();
         const detailsMap: Record<number, { id: number; article_type: string }> = {};
-        details.forEach((item: any) => {
-          detailsMap[item.id] = { id: item.id, article_type: item.article_type };
+        details.forEach((item: { id: number; [key: string]: unknown }) => {
+          detailsMap[item.id] = { id: item.id, article_type: item.article_type as string };
         });
         setItemDetails(detailsMap);
       }
-    } catch (err) {
+    } catch {
       // Optionally handle error
     }
-  };
+  }, [apiUrl]);
+
+  useEffect(() => {
+    fetchRequests();
+  }, [fetchRequests]);
+
+  useEffect(() => {
+    // After requests are loaded, fetch all unique item details
+    if (requests.length > 0) {
+      const allItemIds = Array.from(new Set(requests.flatMap(r => parseItemIds(r.item_ids))));
+      if (allItemIds.length > 0) {
+        fetchItemDetails(allItemIds);
+      }
+    }
+  }, [requests, fetchItemDetails]);
 
   const handleCancel = async (id: number) => {
     try {
@@ -97,43 +92,8 @@ export default function MyBorrowItemsPage() {
 
       // Refresh the list
       fetchRequests();
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${apiUrl}/api/borrow/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
-      if (!response.ok) {
-        throw new Error("Failed to delete request");
-      }
-      fetchRequests();
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'To be Borrowed':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'approved':
-        return 'bg-blue-100 text-blue-800';
-      case 'borrowed':
-        return 'bg-green-100 text-green-800';
-      case 'returned':
-        return 'bg-gray-100 text-black';
-      case 'declined':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-black';
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     }
   };
 
@@ -154,7 +114,6 @@ export default function MyBorrowItemsPage() {
     ...requests.filter(r => r.status === 'approved'),
     ...requests.filter(r => r.status === 'To be Borrowed')
   ];
-  const otherRequests = requests.filter(r => r.status !== 'approved' && r.status !== 'To be Borrowed' && r.status !== 'returned');
 
   return (
     <AuthGuard>
@@ -213,7 +172,6 @@ export default function MyBorrowItemsPage() {
                 <h2 className="text-2xl font-bold text-[#162C49] mb-6">My Borrow Requests</h2>
                 <div className="grid gap-8">
                   {topRequests
-                    .filter(request => !statusFilter || request.status === statusFilter)
                     .map((request) => (
                       <div key={request.id} className="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-2xl p-3 border-l-8 border-[#162C49] border-2 border-black hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]">
                         <div className="flex justify-between items-start mb-6">

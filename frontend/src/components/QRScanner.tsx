@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import type { Html5QrcodeScanner } from "html5-qrcode";
 
 interface QRScannerProps {
   onScan: (result: string) => void;
@@ -8,7 +9,7 @@ interface QRScannerProps {
 }
 
 export default function QRScanner({ onScan, onClose, title = "Scan QR Code" }: QRScannerProps) {
-  const scannerRef = useRef<any>(null);
+  const scannerRef = useRef<Html5QrcodeScanner | null>(null);
   const [isScanning, setIsScanning] = useState(false);
 
   useEffect(() => {
@@ -32,15 +33,15 @@ export default function QRScanner({ onScan, onClose, title = "Scan QR Code" }: Q
               setIsScanning(false);
               onScan(decodedText);
             },
-            (error: any) => {
-              // Handle scan error silently
+            () => {
+              // Optionally handle error or log it
             }
           );
 
           setIsScanning(true);
         }
-      } catch (error) {
-        console.error("Failed to load QR scanner:", error);
+      } catch {
+        console.error("Failed to load QR scanner");
       }
     };
 

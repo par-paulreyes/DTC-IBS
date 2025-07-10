@@ -28,7 +28,7 @@ export default function AuthGuard({ children, requireAdmin = false }: AuthGuardP
         return;
       }
       setIsAuthenticated(true);
-    } catch (error) {
+    } catch {
       router.push("/login");
       return;
     } finally {

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "../../components/Navbar";
 import AuthGuard from "../../components/AuthGuard";
 import ScanChecklist from "../../components/ScanChecklist";
@@ -49,19 +49,13 @@ export default function AdminPage() {
   const [approveRequestId, setApproveRequestId] = useState<number | null>(null);
   const [editLog, setEditLog] = useState<BorrowRequest | null>(null);
   const [editFields, setEditFields] = useState({ status: '', pickup_date: '', return_date: '', remarks: '' });
-  const [viewItems, setViewItems] = useState<{ logId: number, items: any[] } | null>(null);
+  const [viewItems, setViewItems] = useState<{ logId: number, items: Item[] } | null>(null);
   const [deleteLogId, setDeleteLogId] = useState<number | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [success, setSuccess] = useState("");
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-  useEffect(() => {
-    fetchAllRequests();
-    fetchAllLogs();
-  }, []);
-
-  const fetchAllRequests = async () => {
+  const fetchAllRequests = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       const headers = { "Authorization": `Bearer ${token}` };
@@ -76,14 +70,14 @@ export default function AdminPage() {
       if (approvedRes.ok) setApproved(await approvedRes.json());
       if (borrowedRes.ok) setBorrowed(await borrowedRes.json());
 
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiUrl]);
 
-  const fetchAllLogs = async () => {
+  const fetchAllLogs = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(`${apiUrl}/api/admin/logs`, {
@@ -91,19 +85,23 @@ export default function AdminPage() {
       });
       if (response.ok) setLogs(await response.json());
     } catch {}
-  };
+  }, [apiUrl]);
+
+  useEffect(() => {
+    fetchAllRequests();
+    fetchAllLogs();
+  }, [fetchAllRequests, fetchAllLogs]);
 
   const handleApprove = async (id: number) => {
     // Get items for this request
     const request = pending.find(r => r.id === id);
     if (!request) return;
-    const itemIds = parseItemIds(request.item_ids);
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(`${apiUrl}/api/items/details`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-        body: JSON.stringify({ ids: itemIds })
+        body: JSON.stringify({ ids: parseItemIds(request.item_ids) })
       });
       if (response.ok) {
         const requestItems = await response.json();
@@ -132,8 +130,8 @@ export default function AdminPage() {
       setApproveRequestId(null);
       setApproveItems([]);
       fetchAllRequests();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
     }
   };
 
@@ -157,8 +155,8 @@ export default function AdminPage() {
       if (!response.ok) throw new Error("Failed to decline request");
       
       fetchAllRequests();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
     }
   };
 
@@ -166,7 +164,6 @@ export default function AdminPage() {
     // Get items for this request
     const request = approved.find(r => r.id === id);
     if (!request) return;
-    const itemIds = parseItemIds(request.item_ids);
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(`${apiUrl}/api/admin/scan-borrow/${id}`, {
@@ -201,8 +198,8 @@ export default function AdminPage() {
         setChecklistData({ items: requestItems, type: 'return', requestId: id });
         setShowChecklist(true);
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
     }
   };
 
@@ -258,8 +255,8 @@ export default function AdminPage() {
       setShowChecklist(false);
       setChecklistData(null);
       fetchAllRequests();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     }
   };
 

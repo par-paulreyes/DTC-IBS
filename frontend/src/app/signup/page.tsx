@@ -7,6 +7,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,8 +35,8 @@ export default function SignupPage() {
       if (!res.ok) throw new Error(data.error || "Signup failed");
       setSuccess("Signup successful! Redirecting to login...");
       setTimeout(() => router.push("/login"), 2000);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     }
   };
 

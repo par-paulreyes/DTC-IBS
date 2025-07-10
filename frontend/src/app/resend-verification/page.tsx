@@ -27,8 +27,8 @@ export default function ResendVerificationPage() {
       }
       setMessage(data.message || "A new verification email has been sent.");
       setEmail("");
-    } catch (err: any) {
-      setError(err.message || "An error occurred.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred.");
     } finally {
       setLoading(false);
     }
