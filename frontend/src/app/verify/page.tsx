@@ -32,11 +32,11 @@ function VerifyContent() {
   }, [searchParams]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96 text-center">
-        <h1 className="text-2xl font-bold mb-6 text-gray-800">Email Verification</h1>
-        {message && <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-md text-green-700">{message}</div>}
-        {error && <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-700">{error}</div>}
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4 sm:px-6">
+      <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg w-full max-w-sm text-center">
+        <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800">Email Verification</h1>
+        {message && <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">{message}</div>}
+        {error && <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">{error}</div>}
       </div>
     </div>
   );

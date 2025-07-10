@@ -35,9 +35,9 @@ export default function ResendVerificationPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">Resend Verification Email</h1>
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4 sm:px-6">
+      <form onSubmit={handleSubmit} className="bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg w-full max-w-sm">
+        <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center text-gray-800">Resend Verification Email</h1>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
           <input

@@ -119,19 +119,19 @@ export default function MyBorrowItemsPage() {
     <AuthGuard>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col">
         <Navbar />
-        <div className="max-w-7xl mx-auto px-6 py-12 flex-1 w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 lg:py-12 flex-1 w-full">
           {/* Main Container with Legend */}
-          <div className="mb-10">
-            <div className="bg-white/90 border-l-6 border-[#162C49] border-2 border-black rounded-2xl p-6 shadow-xl">
-              <div className="flex justify-between items-center mb-2">
+          <div className="mb-6 sm:mb-8 lg:mb-10">
+            <div className="bg-white/90 border-l-6 border-[#162C49] border-2 border-black rounded-2xl p-4 sm:p-6 shadow-xl">
+              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-2 gap-4">
                 <div>
-                  <h1 className="text-4xl font-extrabold text-[#162C49] mb-2 tracking-tight drop-shadow-lg">My Borrow Items</h1>
-                  <p className="text-lg text-[#162C49] font-medium">Track your item borrowing requests</p>
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#162C49] mb-2 tracking-tight drop-shadow-lg">My Borrow Items</h1>
+                  <p className="text-base sm:text-lg text-[#162C49] font-medium">Track your item borrowing requests</p>
                 </div>
                 {/* Legend */}
-                <div>
+                <div className="lg:text-right">
                   <h3 className="text-sm font-semibold text-[#162C49] mb-3">Status Legend</h3>
-                  <div className="flex gap-6">
+                  <div className="flex flex-wrap gap-3 sm:gap-6">
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 bg-green-600 rounded-full"></span>
                       <span className="text-xs text-gray-700">Approved</span>

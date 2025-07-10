@@ -82,3 +82,81 @@ body {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .glass-card {
+    border-radius: 1rem;
+    border-left: 6px solid #162C49;
+  }
+  
+  .creative-btn {
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+  
+  .status-pill {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Mobile-first responsive improvements */
+.container-responsive {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    padding: 0 2rem;
+  }
+}
+
+/* Improved touch targets for mobile */
+@media (max-width: 768px) {
+  button, 
+  [role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  input, 
+  select, 
+  textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Better modal responsiveness */
+.modal-responsive {
+  width: 95vw;
+  max-width: 500px;
+  margin: 1rem auto;
+}
+
+@media (min-width: 640px) {
+  .modal-responsive {
+    width: 90vw;
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .modal-responsive {
+    width: 80vw;
+    max-width: 800px;
+  }
+}

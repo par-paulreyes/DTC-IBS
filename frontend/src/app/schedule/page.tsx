@@ -128,24 +128,24 @@ export default function SchedulePage() {
       <div className="min-h-screen bg-white flex flex-col">
         <Navbar />
         <div className="flex-1">
-          <div className="max-w-5xl mx-auto px-6 py-10">
-            <div className="bg-white/90 rounded-2xl shadow-xl p-8 border-l-8 border-[#162C49] border-2 border-black">
-              <div className="mb-8 flex flex-col items-center">
-                <h1 className="text-4xl font-extrabold text-[#162C49] mb-2 tracking-tight drop-shadow-lg">Schedule Items</h1>
-                <p className="text-lg font-semibold text-[#162C49]">Select dates and submit your borrow request</p>
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 lg:py-10">
+            <div className="bg-white/90 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 border-l-8 border-[#162C49] border-2 border-black">
+              <div className="mb-6 sm:mb-8 flex flex-col items-center">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#162C49] mb-2 tracking-tight drop-shadow-lg text-center">Schedule Items</h1>
+                <p className="text-base sm:text-lg font-semibold text-[#162C49] text-center">Select dates and submit your borrow request</p>
               </div>
 
               {/* Progress Steps */}
-              <div className="mb-8 flex items-center justify-center gap-8">
+              <div className="mb-6 sm:mb-8 flex items-center justify-center gap-4 sm:gap-6 lg:gap-8">
                 {["Select Dates", "Review Summary", "Submit Request"].map((label, idx) => (
                   <div key={label} className="flex flex-col items-center">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 shadow-xl font-bold text-lg transition-all duration-300
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border-2 shadow-xl font-bold text-sm sm:text-lg transition-all duration-300
                       ${currentStep === (idx === 0 ? 'dates' : idx === 1 ? 'summary' : 'request')
                         ? 'bg-[#162C49] border-[#162C49] text-white scale-110' : 'bg-white border-[#162C49] text-[#162C49] opacity-60'}`}
                     >
                       {idx + 1}
                     </div>
-                    <span className={`mt-2 text-sm font-semibold ${currentStep === (idx === 0 ? 'dates' : idx === 1 ? 'summary' : 'request') ? 'text-[#162C49]' : 'text-[#162C49] opacity-60'}`}>{label}</span>
+                    <span className={`mt-1 sm:mt-2 text-xs sm:text-sm font-semibold text-center ${currentStep === (idx === 0 ? 'dates' : idx === 1 ? 'summary' : 'request') ? 'text-[#162C49]' : 'text-[#162C49] opacity-60'}`}>{label}</span>
                   </div>
                 ))}
               </div>

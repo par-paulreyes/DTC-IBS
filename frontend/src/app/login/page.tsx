@@ -51,47 +51,47 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen font-sans bg-[#e9ecf4]">
       {/* Left Side - Info with creative overlay */}
-      <div className="hidden md:flex flex-col justify-center w-1/2 bg-cover bg-center relative" style={{backgroundImage: 'url(/dtc-bg.png)'}}>
+      <div className="hidden lg:flex flex-col justify-center w-1/2 bg-cover bg-center relative" style={{backgroundImage: 'url(/dtc-bg.png)'}}>
         <div className="absolute inset-0 bg-gradient-to-br from-[#162C49]/70 via-[#162C49]/50 to-[#C1121F]/50"></div>
-        <div className="relative z-10 flex flex-col justify-center h-full px-8 lg:px-12 max-w-2xl">
+        <div className="relative z-10 flex flex-col justify-center h-full px-8 xl:px-12 max-w-2xl">
           {/* Logo and Title Section - One Line */}
           <div className="flex items-center gap-4 mb-8">
-            <Image src="/dtc-logo.jpg" alt="DTC Logo" width={112} height={112} className="w-24 h-24 lg:w-28 lg:h-28 object-cover shadow-lg border-2 border-white flex-shrink-0" />
+            <Image src="/dtc-logo.jpg" alt="DTC Logo" width={112} height={112} className="w-24 h-24 xl:w-28 xl:h-28 object-cover shadow-lg border-2 border-white flex-shrink-0" />
             <div className="flex flex-col">
-              <h1 className="text-3xl lg:text-4xl font-bold !text-white leading-tight">Digital Transformation Center</h1>
-              <h2 className="text-xl lg:text-2xl font-semibold !text-white leading-tight">Inventory Access System</h2>
+              <h1 className="text-3xl xl:text-4xl font-bold !text-white leading-tight">Digital Transformation Center</h1>
+              <h2 className="text-xl xl:text-2xl font-semibold !text-white leading-tight">Inventory Access System</h2>
             </div>
           </div>
           
           {/* Contact Information */}
           <div className="space-y-5">
             <div className="flex items-start">
-              <FaMapMarkerAlt className="w-5 h-5 lg:w-6 lg:h-6 mr-3 mt-1 flex-shrink-0 !text-white" />
-              <span className="text-base lg:text-lg !text-white">2F STEER Hub Bldg., Batangas State University, TNEU - Alangilan Campus, Golden Country Homes, Alangilan, Batangas City</span>
+              <FaMapMarkerAlt className="w-5 h-5 xl:w-6 xl:h-6 mr-3 mt-1 flex-shrink-0 !text-white" />
+              <span className="text-base xl:text-lg !text-white">2F STEER Hub Bldg., Batangas State University, TNEU - Alangilan Campus, Golden Country Homes, Alangilan, Batangas City</span>
             </div>
             <div className="flex items-center">
-              <FaEnvelope className="w-5 h-5 lg:w-6 lg:h-6 mr-3 flex-shrink-0 !text-white" />
-              <span className="text-base lg:text-lg !text-white">dtc@g.batstate-u.edu.ph</span>
+              <FaEnvelope className="w-5 h-5 xl:w-6 xl:h-6 mr-3 flex-shrink-0 !text-white" />
+              <span className="text-base xl:text-lg !text-white">dtc@g.batstate-u.edu.ph</span>
             </div>
             <div className="flex items-center">
-              <FaPhone className="w-5 h-5 lg:w-6 lg:h-6 mr-3 flex-shrink-0 !text-white" />
-              <span className="text-base lg:text-lg !text-white">(043) 425-0139</span>
+              <FaPhone className="w-5 h-5 xl:w-6 xl:h-6 mr-3 flex-shrink-0 !text-white" />
+              <span className="text-base xl:text-lg !text-white">(043) 425-0139</span>
             </div>
           </div>
         </div>
       </div>
       
       {/* Right Side - Login Form */}
-      <div className="flex flex-1 flex-col items-center justify-center relative bg-[#e9ecf4]">
+      <div className="flex flex-1 flex-col items-center justify-center relative bg-[#e9ecf4] px-4 sm:px-6 lg:px-8">
         {/* Welcome Back and subtitle outside the container */}
-        <div className="flex flex-col items-center mb-6">
-          <div className="w-20 h-1.5 rounded-full bg-[#C1121F] mb-5"></div>
-          <h2 className="text-3xl font-extrabold text-[#162C49] tracking-tight mb-1">Welcome Back</h2>
-          <p className="text-base text-[#162C9] font-normal">Sign in to access your inventory system</p>
+        <div className="flex flex-col items-center mb-4 sm:mb-6">
+          <div className="w-16 sm:w-20 h-1.5 rounded-full bg-[#C1121F] mb-4 sm:mb-5"></div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#162C49] tracking-tight mb-1">Welcome Back</h2>
+          <p className="text-sm sm:text-base text-[#162C49] font-normal text-center">Sign in to access your inventory system</p>
         </div>
         
         {/* Login Container */}
-        <div className="w-full max-w-sm rounded-2xl shadow-lg px-7 py-8 bg-white border border-[#162C49]/20">
+        <div className="w-full max-w-sm rounded-2xl shadow-lg px-4 sm:px-7 py-6 sm:py-8 bg-white border border-[#162C49]/20">
           <form onSubmit={handleSubmit}>
             <div className="mb-5">
               <label className="block text-sm font-semibold text-[#162C49] mb-2">Email Address</label>

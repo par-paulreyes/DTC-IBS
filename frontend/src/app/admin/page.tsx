@@ -266,116 +266,6 @@ export default function AdminPage() {
     setChecklistData(null);
   };
 
-  const renderTable = (requests: BorrowRequest[], type: string) => (
-    <div className="w-full max-w-7xl mx-auto bg-white rounded-2xl shadow border-2 border-[#162C49]/10 overflow-x-auto" style={{ minHeight: '600px' }}>
-      <table className="w-full min-w-[1100px]">
-          <thead className="bg-[#162C49]/10">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase tracking-wider" style={{ width: '20%' }}>User</th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase tracking-wider" style={{ width: '15%' }}>Items</th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase tracking-wider" style={{ width: '15%' }}>Pick-up</th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase tracking-wider" style={{ width: '15%' }}>Return</th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase tracking-wider" style={{ width: '15%' }}>Status</th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase tracking-wider" style={{ width: '20%' }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#162C49]/10">
-            {requests.map((request) => (
-              <tr key={request.id} className="hover:bg-[#162C49]/5 whitespace-nowrap">
-                <td className="px-4 py-4 text-sm text-[#162C49] whitespace-nowrap">
-                  <div className="flex items-center whitespace-nowrap">{request.user_email || `User ${request.user_id}`}</div>
-                </td>
-                <td className="px-4 py-4 text-sm text-[#162C49] whitespace-nowrap">
-                  <div className="flex flex-row gap-1 whitespace-nowrap">
-                    {parseItemIds(request.item_ids).map((itemId: number, index: number) => (
-                      <span key={index} className="inline-block bg-[#162C49]/10 rounded px-2 py-1 text-xs text-[#162C49] whitespace-nowrap">
-                        #{itemId}
-                      </span>
-                    ))}
-                  </div>
-                </td>
-                <td className="px-4 py-4 text-sm text-[#162C49] whitespace-nowrap">
-                  <div className="whitespace-nowrap">{formatDate(request.pickup_date)}</div>
-                </td>
-                <td className="px-4 py-4 text-sm text-[#162C49] whitespace-nowrap">
-                  <div className="whitespace-nowrap">{formatDate(request.return_date)}</div>
-                </td>
-                <td className="px-4 py-4 text-sm text-[#162C49] whitespace-nowrap">
-                  <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(request.status)} whitespace-nowrap`}>
-                    {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
-                  </span>
-                </td>
-                <td className="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                  <div className="flex flex-row gap-1 whitespace-nowrap">
-                    {type === 'pending' && (
-                      <>
-                        <button 
-                          className="bg-[#162C49] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#0F1F35] transition-all duration-200 shadow whitespace-nowrap" 
-                          onClick={() => handleApprove(request.id)}
-                        >
-                          Approve
-                        </button>
-                        <button 
-                          className="bg-[#C1121F] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#a00e18] transition-all duration-200 shadow whitespace-nowrap" 
-                          onClick={() => handleDecline(request.id)}
-                        >
-                          Decline
-                        </button>
-                      </>
-                    )}
-                    {type === 'approved' && (
-                      <button 
-                        className="bg-[#162C49] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#0F1F35] transition-all duration-200 shadow whitespace-nowrap" 
-                        onClick={() => handleScanBorrow(request.id)}
-                      >
-                        Process Borrow
-                      </button>
-                    )}
-                    {type === 'borrowed' && (
-                      <button 
-                        className="bg-[#162C49] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#0F1F35] transition-all duration-200 shadow whitespace-nowrap" 
-                        onClick={() => handleScanReturn(request.id)}
-                      >
-                        Process Return
-                      </button>
-                    )}
-                    {type === 'logs' && (
-                      <>
-                        <button 
-                          className="bg-orange-500 text-white px-3 py-1 rounded-lg text-xs hover:bg-orange-600 transition-all duration-200 shadow whitespace-nowrap" 
-                          onClick={() => openEditModal(request)}
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          className="bg-red-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-red-700 transition-all duration-200 shadow whitespace-nowrap" 
-                          onClick={() => handleDeleteLog(request.id)}
-                        >
-                          Delete
-                        </button>
-                        <button 
-                          className="bg-[#162C49] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#0F1F35] transition-all duration-200 shadow whitespace-nowrap" 
-                          onClick={() => handleViewItems(request)}
-                        >
-                          View Items
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-    </div>
-  );
-
-  const renderEmptyState = (message: string) => (
-    <div className="w-full bg-white rounded-2xl shadow border-2 border-[#162C49]/10 flex items-center justify-center" style={{ minHeight: '600px' }}>
-      <p className="text-[#162C49] text-lg font-semibold">{message}</p>
-    </div>
-  );
-
   const handleDeleteLog = (id: number) => {
     setDeleteLogId(id);
     setShowDeleteModal(true);
@@ -460,13 +350,239 @@ export default function AdminPage() {
     setViewItems(null);
   };
 
+  // Mobile card component for requests
+  const renderMobileCard = (request: BorrowRequest, type: string) => (
+    <div key={request.id} className="bg-white rounded-xl shadow-md border border-[#162C49]/10 p-4 mb-4">
+      <div className="flex justify-between items-start mb-3">
+        <div className="flex-1">
+          <h3 className="font-semibold text-[#162C49] text-sm">
+            {request.user_email || `User ${request.user_id}`}
+          </h3>
+          <p className="text-xs text-[#162C49]/70">ID: #{request.id}</p>
+        </div>
+        <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(request.status)}`}>
+          {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+        </span>
+      </div>
+      
+      <div className="space-y-2 mb-4">
+        <div className="flex items-center text-sm">
+          <span className="font-medium text-[#162C49] w-16">Items:</span>
+          <div className="flex flex-wrap gap-1">
+            {parseItemIds(request.item_ids).map((itemId: number, index: number) => (
+              <span key={index} className="inline-block bg-[#162C49]/10 rounded px-2 py-1 text-xs text-[#162C49]">
+                #{itemId}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center text-sm">
+          <span className="font-medium text-[#162C49] w-16">Pick-up:</span>
+          <span className="text-[#162C49]">{formatDate(request.pickup_date)}</span>
+        </div>
+        <div className="flex items-center text-sm">
+          <span className="font-medium text-[#162C49] w-16">Return:</span>
+          <span className="text-[#162C49]">{formatDate(request.return_date)}</span>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {type === 'pending' && (
+          <>
+            <button 
+              className="bg-[#162C49] text-white px-3 py-2 rounded-lg text-xs hover:bg-[#0F1F35] transition-all duration-200 shadow flex-1" 
+              onClick={() => handleApprove(request.id)}
+            >
+              Approve
+            </button>
+            <button 
+              className="bg-[#C1121F] text-white px-3 py-2 rounded-lg text-xs hover:bg-[#a00e18] transition-all duration-200 shadow flex-1" 
+              onClick={() => handleDecline(request.id)}
+            >
+              Decline
+            </button>
+          </>
+        )}
+        {type === 'approved' && (
+          <button 
+            className="bg-[#162C49] text-white px-3 py-2 rounded-lg text-xs hover:bg-[#0F1F35] transition-all duration-200 shadow w-full" 
+            onClick={() => handleScanBorrow(request.id)}
+          >
+            Process Borrow
+          </button>
+        )}
+        {type === 'borrowed' && (
+          <button 
+            className="bg-[#162C49] text-white px-3 py-2 rounded-lg text-xs hover:bg-[#0F1F35] transition-all duration-200 shadow w-full" 
+            onClick={() => handleScanReturn(request.id)}
+          >
+            Process Return
+          </button>
+        )}
+        {type === 'logs' && (
+          <>
+            <button 
+              className="bg-orange-500 text-white px-3 py-2 rounded-lg text-xs hover:bg-orange-600 transition-all duration-200 shadow flex-1" 
+              onClick={() => openEditModal(request)}
+            >
+              Edit
+            </button>
+            <button 
+              className="bg-red-600 text-white px-3 py-2 rounded-lg text-xs hover:bg-red-700 transition-all duration-200 shadow flex-1" 
+              onClick={() => handleDeleteLog(request.id)}
+            >
+              Delete
+            </button>
+            <button 
+              className="bg-[#162C49] text-white px-3 py-2 rounded-lg text-xs hover:bg-[#0F1F35] transition-all duration-200 shadow w-full mt-2" 
+              onClick={() => handleViewItems(request)}
+            >
+              View Items
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+
+  // Desktop table component
+  const renderDesktopTable = (requests: BorrowRequest[], type: string) => (
+    <div className="w-full bg-white rounded-2xl shadow border-2 border-[#162C49]/10 overflow-x-auto" style={{ minHeight: '600px' }}>
+      <table className="w-full min-w-[1100px]">
+        <thead className="bg-[#162C49]/10">
+          <tr>
+            <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase tracking-wider" style={{ width: '20%' }}>User</th>
+            <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase tracking-wider" style={{ width: '15%' }}>Items</th>
+            <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase tracking-wider" style={{ width: '15%' }}>Pick-up</th>
+            <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase tracking-wider" style={{ width: '15%' }}>Return</th>
+            <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase tracking-wider" style={{ width: '15%' }}>Status</th>
+            <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase tracking-wider" style={{ width: '20%' }}>Actions</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-[#162C49]/10">
+          {requests.map((request) => (
+            <tr key={request.id} className="hover:bg-[#162C49]/5 whitespace-nowrap">
+              <td className="px-4 py-4 text-sm text-[#162C49] whitespace-nowrap">
+                <div className="flex items-center whitespace-nowrap">{request.user_email || `User ${request.user_id}`}</div>
+              </td>
+              <td className="px-4 py-4 text-sm text-[#162C49] whitespace-nowrap">
+                <div className="flex flex-row gap-1 whitespace-nowrap">
+                  {parseItemIds(request.item_ids).map((itemId: number, index: number) => (
+                    <span key={index} className="inline-block bg-[#162C49]/10 rounded px-2 py-1 text-xs text-[#162C49] whitespace-nowrap">
+                      #{itemId}
+                    </span>
+                  ))}
+                </div>
+              </td>
+              <td className="px-4 py-4 text-sm text-[#162C49] whitespace-nowrap">
+                <div className="whitespace-nowrap">{formatDate(request.pickup_date)}</div>
+              </td>
+              <td className="px-4 py-4 text-sm text-[#162C49] whitespace-nowrap">
+                <div className="whitespace-nowrap">{formatDate(request.return_date)}</div>
+              </td>
+              <td className="px-4 py-4 text-sm text-[#162C49] whitespace-nowrap">
+                <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(request.status)} whitespace-nowrap`}>
+                  {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                </span>
+              </td>
+              <td className="px-4 py-4 text-sm font-medium whitespace-nowrap">
+                <div className="flex flex-row gap-1 whitespace-nowrap">
+                  {type === 'pending' && (
+                    <>
+                      <button 
+                        className="bg-[#162C49] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#0F1F35] transition-all duration-200 shadow whitespace-nowrap" 
+                        onClick={() => handleApprove(request.id)}
+                      >
+                        Approve
+                      </button>
+                      <button 
+                        className="bg-[#C1121F] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#a00e18] transition-all duration-200 shadow whitespace-nowrap" 
+                        onClick={() => handleDecline(request.id)}
+                      >
+                        Decline
+                      </button>
+                    </>
+                  )}
+                  {type === 'approved' && (
+                    <button 
+                      className="bg-[#162C49] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#0F1F35] transition-all duration-200 shadow whitespace-nowrap" 
+                      onClick={() => handleScanBorrow(request.id)}
+                    >
+                      Process Borrow
+                    </button>
+                  )}
+                  {type === 'borrowed' && (
+                    <button 
+                      className="bg-[#162C49] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#0F1F35] transition-all duration-200 shadow whitespace-nowrap" 
+                      onClick={() => handleScanReturn(request.id)}
+                    >
+                      Process Return
+                    </button>
+                  )}
+                  {type === 'logs' && (
+                    <>
+                      <button 
+                        className="bg-orange-500 text-white px-3 py-1 rounded-lg text-xs hover:bg-orange-600 transition-all duration-200 shadow whitespace-nowrap" 
+                        onClick={() => openEditModal(request)}
+                      >
+                        Edit
+                      </button>
+                      <button 
+                        className="bg-red-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-red-700 transition-all duration-200 shadow whitespace-nowrap" 
+                        onClick={() => handleDeleteLog(request.id)}
+                      >
+                        Delete
+                      </button>
+                      <button 
+                        className="bg-[#162C49] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#0F1F35] transition-all duration-200 shadow whitespace-nowrap" 
+                        onClick={() => handleViewItems(request)}
+                      >
+                        View Items
+                      </button>
+                    </>
+                  )}
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  const renderTable = (requests: BorrowRequest[], type: string) => (
+    <>
+      {/* Mobile view */}
+      <div className="block lg:hidden">
+        {requests.length > 0 ? (
+          <div className="space-y-4">
+            {requests.map((request) => renderMobileCard(request, type))}
+          </div>
+        ) : (
+          renderEmptyState("No requests found")
+        )}
+      </div>
+      
+      {/* Desktop view */}
+      <div className="hidden lg:block">
+        {requests.length > 0 ? renderDesktopTable(requests, type) : renderEmptyState("No requests found")}
+      </div>
+    </>
+  );
+
+  const renderEmptyState = (message: string) => (
+    <div className="w-full bg-white rounded-2xl shadow border-2 border-[#162C49]/10 flex items-center justify-center" style={{ minHeight: '600px' }}>
+      <p className="text-[#162C49] text-lg font-semibold">{message}</p>
+    </div>
+  );
+
   return (
     <AuthGuard requireAdmin>
       <div className="min-h-screen bg-[#e9ecf4] flex flex-col">
         <Navbar />
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 flex-1">
-          <div className="mb-8">
-            <h1 className="text-4xl font-extrabold text-[#162C49] mb-2 tracking-tight drop-shadow-lg">Admin Dashboard</h1>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-10 flex-1">
+          <div className="mb-4 sm:mb-6 lg:mb-8">
+            <h1 className="text-xl sm:text-2xl lg:text-4xl font-extrabold text-[#162C49] mb-2 tracking-tight drop-shadow-lg">Admin Dashboard</h1>
           </div>
 
           {error && (
@@ -477,7 +593,39 @@ export default function AdminPage() {
 
           <div className="bg-white/90 rounded-2xl shadow-xl border-l-8 border-[#162C49] border-2 border-black">
             <div className="border-b border-[#162C49]/20">
-              <nav className="flex space-x-4 px-8 pt-6 overflow-x-auto">
+              {/* Mobile navigation */}
+              <div className="block lg:hidden">
+                <nav className="flex flex-col space-y-2 p-4">
+                  {[
+                    { key: "pending", label: "Pending for Approval", count: pending.length },
+                    { key: "approved", label: "Approved", count: approved.length },
+                    { key: "borrowed", label: "Borrowed", count: borrowed.length },
+                    { key: "logs", label: "All Logs", count: logs.length }
+                  ].map(({ key, label, count }) => (
+                    <button
+                      key={key}
+                      onClick={() => setTab(key)}
+                      className={`py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-200 text-left
+                        ${tab === key
+                          ? "bg-[#162C49] text-white shadow-lg"
+                          : "bg-[#162C49]/5 text-[#162C49] hover:bg-[#162C49]/10"}
+                      `}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span>{label}</span>
+                        <span className={`py-0.5 px-2 rounded-full text-xs font-bold ${
+                          tab === key ? 'bg-white/20 text-white' : 'bg-[#162C49]/10 text-[#162C49]'
+                        }`}>
+                          {count}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </nav>
+              </div>
+
+              {/* Desktop navigation */}
+              <nav className="hidden lg:flex space-x-4 px-8 pt-6 overflow-x-auto">
                 {[
                   { key: "pending", label: "Pending for Approval", count: pending.length },
                   { key: "approved", label: "Approved", count: approved.length },
@@ -502,7 +650,7 @@ export default function AdminPage() {
               </nav>
             </div>
 
-            <div className="p-8">
+            <div className="p-3 sm:p-4 lg:p-8">
               {loading ? (
                 <div className="flex justify-center items-center" style={{ minHeight: '600px' }}>
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#162C49]"></div>
@@ -540,35 +688,75 @@ export default function AdminPage() {
 
         {/* Edit Modal */}
         {editLog && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50" aria-modal="true" role="dialog">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl border-2 border-[#162C49]/20">
-              <h2 className="text-2xl font-bold mb-4 text-[#162C49]">Edit Log #{editLog.id}</h2>
-              <div className="mb-4">
-                <label className="block text-sm font-semibold text-[#162C49] mb-2">Status</label>
-                <select name="status" value={editFields.status} onChange={handleEditFieldChange} className="w-full border rounded-lg px-3 py-2">
-                  <option value="">Select status</option>
-                  <option value="To be Borrowed">To be Borrowed</option>
-                  <option value="approved">Approved</option>
-                  <option value="borrowed">Borrowed</option>
-                  <option value="returned">Returned</option>
-                  <option value="declined">Declined</option>
-                </select>
+          <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50 p-2 sm:p-4" aria-modal="true" role="dialog">
+            <div className="bg-white rounded-xl p-3 sm:p-4 w-full max-w-sm shadow-2xl border border-[#162C49]/20 max-h-[85vh] overflow-y-auto">
+              {/* Compact Header */}
+              <div className="mb-4 pb-3 border-b border-[#162C49]/10">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-base sm:text-lg font-bold text-[#162C49]">Edit Log #{editLog.id}</h2>
+                    <p className="text-xs text-[#162C49]/70 mt-1">Update log details</p>
+                  </div>
+                  <div className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                    Edit
+                  </div>
+                </div>
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-semibold text-[#162C49] mb-2">Pick-up Date</label>
-                <input type="date" name="pickup_date" value={editFields.pickup_date} onChange={handleEditFieldChange} className="w-full border rounded-lg px-3 py-2" />
+
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-medium text-[#162C49] mb-1">Status</label>
+                  <select 
+                    name="status" 
+                    value={editFields.status} 
+                    onChange={handleEditFieldChange} 
+                    className="w-full border border-[#162C49]/20 rounded-lg px-2 py-1.5 text-xs focus:ring-1 focus:ring-[#162C49]/20 focus:border-[#162C49]"
+                  >
+                    <option value="">Select status</option>
+                    <option value="To be Borrowed">To be Borrowed</option>
+                    <option value="approved">Approved</option>
+                    <option value="borrowed">Borrowed</option>
+                    <option value="returned">Returned</option>
+                    <option value="declined">Declined</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-[#162C49] mb-1">Pick-up Date</label>
+                  <input 
+                    type="date" 
+                    name="pickup_date" 
+                    value={editFields.pickup_date} 
+                    onChange={handleEditFieldChange} 
+                    className="w-full border border-[#162C49]/20 rounded-lg px-2 py-1.5 text-xs focus:ring-1 focus:ring-[#162C49]/20 focus:border-[#162C49]" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-[#162C49] mb-1">Return Date</label>
+                  <input 
+                    type="date" 
+                    name="return_date" 
+                    value={editFields.return_date} 
+                    onChange={handleEditFieldChange} 
+                    className="w-full border border-[#162C49]/20 rounded-lg px-2 py-1.5 text-xs focus:ring-1 focus:ring-[#162C49]/20 focus:border-[#162C49]" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-[#162C49] mb-1">Remarks</label>
+                  <textarea 
+                    name="remarks" 
+                    value={editFields.remarks} 
+                    onChange={handleEditFieldChange} 
+                    className="w-full border border-[#162C49]/20 rounded-lg px-2 py-1.5 resize-none text-xs focus:ring-1 focus:ring-[#162C49]/20 focus:border-[#162C49]" 
+                    rows={2} 
+                    placeholder="Add remarks here..." 
+                  />
+                </div>
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-semibold text-[#162C49] mb-2">Return Date</label>
-                <input type="date" name="return_date" value={editFields.return_date} onChange={handleEditFieldChange} className="w-full border rounded-lg px-3 py-2" />
-              </div>
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-[#162C49] mb-2">Remarks</label>
-                <textarea name="remarks" value={editFields.remarks} onChange={handleEditFieldChange} className="w-full border rounded-lg px-3 py-2 resize-none" rows={3} placeholder="Add remarks here..." />
-              </div>
-              <div className="flex justify-end space-x-3">
-                <button className="px-4 py-2 bg-gray-300 rounded-lg text-[#162C49] font-semibold hover:bg-gray-400 transition-colors" onClick={closeEditModal}>Cancel</button>
-                <button className="px-4 py-2 bg-[#162C49] text-white rounded-lg font-semibold hover:bg-[#0F1F35] transition-colors" onClick={handleSaveEdit}>Save</button>
+              
+              {/* Compact Action Buttons */}
+              <div className="flex space-x-2 pt-3 border-t border-[#162C49]/10 mt-4">
+                <button className="flex-1 px-3 py-2 bg-gray-300 rounded-lg text-[#162C49] font-medium hover:bg-gray-400 transition-colors text-xs" onClick={closeEditModal}>Cancel</button>
+                <button className="flex-1 px-3 py-2 bg-[#162C49] text-white rounded-lg font-medium hover:bg-[#0F1F35] transition-colors text-xs" onClick={handleSaveEdit}>Save</button>
               </div>
             </div>
           </div>
@@ -576,42 +764,67 @@ export default function AdminPage() {
 
         {/* View Items Modal */}
         {viewItems && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50" aria-modal="true" role="dialog">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl border-2 border-[#162C49]/20">
-              <h2 className="text-2xl font-bold mb-6 text-[#162C49]">Items for Log #{viewItems.logId}</h2>
+          <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50 p-2 sm:p-4" aria-modal="true" role="dialog">
+            <div className="bg-white rounded-xl p-3 sm:p-4 w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-2xl border border-[#162C49]/20">
+              {/* Compact Header */}
+              <div className="mb-4 pb-3 border-b border-[#162C49]/10">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-base sm:text-lg font-bold text-[#162C49]">Items for Log #{viewItems.logId}</h2>
+                    <p className="text-xs text-[#162C49]/70 mt-1">
+                      {viewItems.items.length} item{viewItems.items.length !== 1 ? 's' : ''} in this log
+                    </p>
+                  </div>
+                  <div className="px-2 py-1 rounded-full text-xs font-medium bg-[#162C49]/10 text-[#162C49]">
+                    View
+                  </div>
+                </div>
+              </div>
+
               {/* Show remarks if present for this log */}
               {logs.find(l => l.id === viewItems.logId)?.remarks && (
-                <div className="mb-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 rounded">
-                  <span className="font-semibold">Remarks: </span>
-                  {logs.find(l => l.id === viewItems.logId)?.remarks}
+                <div className="mb-3 p-2 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded text-xs">
+                  <span className="font-medium">Remarks:</span> {logs.find(l => l.id === viewItems.logId)?.remarks}
                 </div>
               )}
-              <div className="overflow-x-auto">
-                <table className="min-w-full bg-white rounded-lg">
-                  <thead className="bg-[#162C49]/10">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase">Property No</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase">Article Type</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase">QR Code</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase">Status</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold text-[#162C49] uppercase">Remarks</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#162C49]/10">
-                    {viewItems.items.map((item) => (
-                      <tr key={item.id} className="hover:bg-[#162C49]/5">
-                        <td className="px-4 py-3 text-sm text-[#162C49]">{item.property_no}</td>
-                        <td className="px-4 py-3 text-sm text-[#162C49]">{item.article_type}</td>
-                        <td className="px-4 py-3 text-sm text-[#162C49]">{item.qr_code || '-'}</td>
-                        <td className="px-4 py-3 text-sm text-[#162C49]">{item.item_status}</td>
-                        <td className="px-4 py-3 text-sm text-[#162C49]">{item.remarks || '-'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              
+              {/* Compact Items List */}
+              <div className="space-y-2 mb-4">
+                {viewItems.items.map((item, index) => (
+                  <div key={item.id} className="border border-[#162C49]/10 rounded-lg p-2 sm:p-3 bg-[#162C49]/5">
+                    <div className="flex items-start space-x-2">
+                      <span className="inline-flex items-center justify-center w-5 h-5 bg-[#162C49]/20 text-[#162C49] text-xs font-bold rounded-full flex-shrink-0">
+                        {index + 1}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="font-medium text-[#162C49] text-sm">{item.article_type}</h4>
+                          <span className={`px-1.5 py-0.5 rounded-full text-xs font-medium ${
+                            item.item_status === 'Available' ? 'bg-green-100 text-green-700' :
+                            item.item_status === 'Borrowed' ? 'bg-blue-100 text-blue-700' :
+                            'bg-gray-100 text-gray-700'
+                          }`}>
+                            {item.item_status}
+                          </span>
+                        </div>
+                                                 <div className="space-y-0.5 text-xs text-[#162C49]">
+                           <p><span className="font-medium">Property No.:</span> {item.property_no}</p>
+                           {item.qr_code && (
+                             <p>QR Code: {item.qr_code}</p>
+                           )}
+                           {item.remarks && (
+                             <p className="text-[#162C49]/70 italic">"{item.remarks}"</p>
+                           )}
+                         </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div className="flex justify-end mt-6">
-                <button className="px-6 py-2 bg-gray-300 rounded-lg text-[#162C49] font-semibold hover:bg-gray-400 transition-colors" onClick={closeViewItems}>Close</button>
+              
+              {/* Compact Action Button */}
+              <div className="flex justify-end pt-3 border-t border-[#162C49]/10">
+                <button className="px-4 py-2 bg-gray-300 rounded-lg text-[#162C49] font-medium hover:bg-gray-400 transition-colors text-sm" onClick={closeViewItems}>Close</button>
               </div>
             </div>
           </div>
@@ -619,13 +832,23 @@ export default function AdminPage() {
 
         {/* Delete Confirmation Modal */}
         {showDeleteModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50" aria-modal="true" role="dialog">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl border-2 border-[#162C49]/20">
-              <h2 className="text-2xl font-bold mb-4 text-[#162C49]">Confirm Delete</h2>
-              <p className="mb-6 text-[#162C49]">Are you sure you want to delete this log? This action cannot be undone.</p>
-              <div className="flex justify-end space-x-3">
-                <button className="px-4 py-2 bg-gray-300 rounded-lg text-[#162C49] font-semibold hover:bg-gray-400 transition-colors" onClick={cancelDeleteLog}>Cancel</button>
-                <button className="px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors" onClick={confirmDeleteLog}>Yes, Delete</button>
+          <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50 p-2 sm:p-4" aria-modal="true" role="dialog">
+            <div className="bg-white rounded-xl p-3 sm:p-4 w-full max-w-sm shadow-2xl border border-[#162C49]/20">
+              {/* Compact Header */}
+              <div className="text-center mb-4">
+                <div className="mx-auto flex items-center justify-center h-8 w-8 rounded-full bg-red-100 mb-3">
+                  <svg className="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
+                </div>
+                <h2 className="text-base sm:text-lg font-bold mb-1 text-[#162C49]">Confirm Delete</h2>
+                <p className="text-xs text-[#162C49]/70">This action cannot be undone.</p>
+              </div>
+              
+              {/* Compact Action Buttons */}
+              <div className="flex space-x-2 pt-3 border-t border-[#162C49]/10">
+                <button className="flex-1 px-3 py-2 bg-gray-300 rounded-lg text-[#162C49] font-medium hover:bg-gray-400 transition-colors text-xs" onClick={cancelDeleteLog}>Cancel</button>
+                <button className="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors text-xs" onClick={confirmDeleteLog}>Delete</button>
               </div>
             </div>
           </div>

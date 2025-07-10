@@ -157,19 +157,19 @@ export default function HomePage() {
     <AuthGuard>
       <div className="min-h-screen bg-white flex flex-col">
         <Navbar />
-        <div className="max-w-6xl mx-auto px-4 py-12 flex-1">
-          <div className="mb-10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 flex-1">
+          <div className="mb-6 sm:mb-8 lg:mb-10">
             {/* Status Legend with Inventory Items */}
-            <div className="bg-white/90 border-l-6 border-[#162C49] border-2 border-black rounded-2xl p-6 shadow-xl">
-              <div className="flex justify-between items-center mb-4">
+            <div className="bg-white/90 border-l-6 border-[#162C49] border-2 border-black rounded-2xl p-4 sm:p-6 shadow-xl">
+              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-4 gap-4">
                 <div>
-                  <h1 className="text-4xl font-extrabold text-primaryBlue mb-2 tracking-tight drop-shadow-lg">Inventory Items</h1>
-                  <p className="text-lg text-[#162C49] font-medium">Select items you want to borrow</p>
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primaryBlue mb-2 tracking-tight drop-shadow-lg">Inventory Items</h1>
+                  <p className="text-base sm:text-lg text-[#162C49] font-medium">Select items you want to borrow</p>
                 </div>
                 
-                <div>
+                <div className="lg:text-right">
                   <h3 className="text-sm font-semibold text-[#162C49] mb-3">Status Legend</h3>
-                                    <div className="flex gap-6">
+                  <div className="flex flex-wrap gap-3 sm:gap-6">
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 bg-green-600 rounded-full"></span>
                       <span className="text-xs text-gray-700">Available</span>
@@ -195,9 +195,9 @@ export default function HomePage() {
           )}
 
           {/* Filters */}
-          <div className="bg-white/90 rounded-2xl shadow-xl p-8 mb-10 border-l-6 border-[#162C49] border-2 border-black">
-            <h2 className="text-xl font-bold text-primaryBlue mb-6">Filters</h2>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="bg-white/90 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 lg:mb-10 border-l-6 border-[#162C49] border-2 border-black">
+            <h2 className="text-lg sm:text-xl font-bold text-primaryBlue mb-4 sm:mb-6">Filters</h2>
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
               {/* Search */}
               <div>
                 <label className="block text-sm font-semibold text-primaryBlue mb-2">Search</label>
@@ -258,9 +258,9 @@ export default function HomePage() {
 
           {/* Selected Items Display */}
           {selectedItems.size > 0 && (
-            <div className="bg-blue-50/80 border-l-6 border-[#162C49] border-2 border-black rounded-2xl p-6 mb-8 shadow-xl">
-              <h2 className="text-2xl font-bold text-[#162C49] mb-4">Selected Items ({selectedItems.size})</h2>
-              <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            <div className="bg-blue-50/80 border-l-6 border-[#162C49] border-2 border-black rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 shadow-xl">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#162C49] mb-4">Selected Items ({selectedItems.size})</h2>
+              <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {getSelectedItems().map((item) => (
                   <div key={item.id} className="bg-white/95 rounded-2xl p-4 border-l-4 border-[#162C49] border-2 border-black shadow-xl flex flex-col gap-2 hover:translate-y-[-2px] hover:shadow-2xl transition-all duration-300">
                     <div className="flex justify-between items-start">
@@ -296,9 +296,9 @@ export default function HomePage() {
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primaryRed"></div>
             </div>
           ) : (
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {filteredItems.map((item) => (
-                <div key={item.id} className="bg-white/95 rounded-2xl shadow-xl p-5 hover:translate-y-[-2px] hover:shadow-2xl border-l-6 border-[#162C49] border-2 border-black transition-all duration-300 flex flex-col gap-2 group hover:scale-[1.01]">
+                <div key={item.id} className="bg-white/95 rounded-2xl shadow-xl p-4 sm:p-5 hover:translate-y-[-2px] hover:shadow-2xl border-l-6 border-[#162C49] border-2 border-black transition-all duration-300 flex flex-col gap-2 group hover:scale-[1.01]">
                   <div className="flex items-start gap-3 mb-2">
                     <input
                       type="checkbox"
@@ -358,8 +358,8 @@ export default function HomePage() {
 
         {/* Item Details Modal */}
         {showDetailsModal && selectedItemDetails && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50" aria-modal="true" role="dialog">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl border-l-6 border-[#162C49] border-2 border-black">
+          <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50 p-4" aria-modal="true" role="dialog">
+            <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 w-full max-w-md mx-4 shadow-2xl border-l-6 border-[#162C49] border-2 border-black">
               <h2 className="text-2xl font-extrabold mb-6 text-primaryBlue">Item Details</h2>
               <div className="space-y-4">
                 <div className="bg-blue-50/30 p-3 rounded-lg">
