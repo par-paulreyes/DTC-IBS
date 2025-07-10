@@ -166,12 +166,11 @@ export default function AdminPage() {
     if (!request) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${apiUrl}/api/admin/scan-borrow/${id}`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
+      // First, get the items for this request
+      const response = await fetch(`${apiUrl}/api/items/details`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({ ids: parseItemIds(request.item_ids) })
       });
       if (response.ok) {
         const requestItems = await response.json();
@@ -184,14 +183,16 @@ export default function AdminPage() {
   };
 
   const handleScanReturn = async (id: number) => {
+    // Get items for this request
+    const request = borrowed.find(r => r.id === id);
+    if (!request) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${apiUrl}/api/admin/scan-return/${id}`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
+      // First, get the items for this request
+      const response = await fetch(`${apiUrl}/api/items/details`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({ ids: parseItemIds(request.item_ids) })
       });
       if (response.ok) {
         const requestItems = await response.json();
@@ -534,7 +535,6 @@ export default function AdminPage() {
             type={checklistData.type}
             onComplete={handleChecklistComplete}
             onCancel={handleChecklistCancel}
-            hideCondition={checklistData.type === 'borrow'}
           />
         )}
 
