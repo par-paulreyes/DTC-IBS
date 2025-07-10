@@ -19,7 +19,7 @@ export default function LoginPage() {
     setLoading(true);
     const emailPattern = /^\d{2}-\d{5}@g\.batstate-u\.edu\.ph$/;
     if (!emailPattern.test(email)) {
-      setError("Email must be in format: XX-XXXXX@g.batstate-u.edu.ph (e.g., 22-0869@g.batstate-u.edu.ph)");
+      setError("Email must be in format: XX-XXXXX@g.batstate-u.edu.ph");
       setLoading(false);
       return;
     }
@@ -97,7 +97,7 @@ export default function LoginPage() {
               <label className="block text-sm font-semibold text-[#162C49] mb-2">Email Address</label>
               <input
                 type="email"
-                placeholder="Enter your email"
+                placeholder="e.g., XX-XXXXX@g.batstate-u.edu.ph"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#162C49] focus:border-transparent text-base font-normal bg-white placeholder-gray-400"
@@ -137,6 +137,18 @@ export default function LoginPage() {
               )}
             </button>
           </form>
+          
+          {/* Sign Up Link */}
+          <div className="mt-6 text-center">
+            <span className="text-sm text-[#162C49]">Don&apos;t have an account? </span>
+            <button
+              type="button"
+              onClick={() => router.push('/signup')}
+              className="text-sm font-semibold text-[#C1121F] hover:text-[#162C49] transition-colors duration-200 underline"
+            >
+              Sign up.
+            </button>
+          </div>
         </div>
       </div>
     </div>
