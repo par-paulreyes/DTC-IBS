@@ -571,7 +571,7 @@ export default function AdminPage() {
   );
 
   const renderEmptyState = (message: string) => (
-    <div className="w-full bg-white rounded-2xl shadow border-2 border-[#162C49]/10 flex items-center justify-center" style={{ minHeight: '600px' }}>
+    <div className="w-full min-w-full bg-white rounded-2xl shadow border-2 border-[#162C49]/10 flex items-center justify-center" style={{ minHeight: '600px', minWidth: '100%' }}>
       <p className="text-[#162C49] text-lg font-semibold">{message}</p>
     </div>
   );
@@ -580,7 +580,7 @@ export default function AdminPage() {
     <AuthGuard requireAdmin>
       <div className="min-h-screen bg-[#e9ecf4] flex flex-col">
         <Navbar />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-10 flex-1">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-10 flex-1 w-full">
           <div className="mb-4 sm:mb-6 lg:mb-8">
             <h1 className="text-xl sm:text-2xl lg:text-4xl font-extrabold text-[#162C49] mb-2 tracking-tight drop-shadow-lg">Admin Dashboard</h1>
           </div>
@@ -591,7 +591,7 @@ export default function AdminPage() {
             </div>
           )}
 
-          <div className="bg-white/90 rounded-2xl shadow-xl border-l-8 border-[#162C49] border-2 border-black">
+          <div className="bg-white/90 rounded-2xl shadow-xl border-l-8 border-[#162C49] border-2 border-black w-full min-w-full">
             <div className="border-b border-[#162C49]/20">
               {/* Mobile navigation */}
               <div className="block lg:hidden">
@@ -650,9 +650,9 @@ export default function AdminPage() {
               </nav>
             </div>
 
-            <div className="p-3 sm:p-4 lg:p-8">
+            <div className="p-3 sm:p-4 lg:p-8 w-full min-w-full">
               {loading ? (
-                <div className="flex justify-center items-center" style={{ minHeight: '600px' }}>
+                <div className="flex justify-center items-center w-full min-w-full" style={{ minHeight: '600px' }}>
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#162C49]"></div>
                 </div>
               ) : (
