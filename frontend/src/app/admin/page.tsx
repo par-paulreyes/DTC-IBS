@@ -677,7 +677,7 @@ export default function AdminPage() {
         <Navbar />
         <div className="max-w-[1300px] mx-auto px-3 sm:px-5 lg:px-7 py-4 sm:py-6 lg:py-9 flex-1 w-full">
           <div className="mb-3 sm:mb-5 lg:mb-7">
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#162C49] mb-1 tracking-tight">Admin Panel</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#162C49] mb-1 tracking-tight">Admin Dashboard</h1>
           </div>
 
           {error && (
