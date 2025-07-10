@@ -63,11 +63,7 @@ export default function Navbar() {
     return false;
   };
 
-  const handleNavClick = (path: string) => {
-    console.log('Navigating to:', path); // Debug log
-    router.push(path);
-    setIsMobileMenuOpen(false);
-  };
+
 
   const handleNavClickWithEvent = (path: string, event: React.MouseEvent) => {
     event.preventDefault();

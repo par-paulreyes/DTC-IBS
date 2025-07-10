@@ -58,7 +58,7 @@ export default function ApproveConfirmModal({ items, onConfirm, onCancel }: Appr
                       <p className="text-[#162C49]/70">{item.specifications}</p>
                     )}
                     {item.remarks && (
-                      <p className="text-[#162C49]/70 italic">"{item.remarks}"</p>
+                      <p className="text-[#162C49]/70 italic">&ldquo;{item.remarks}&rdquo;</p>
                     )}
                   </div>
                 </div>
