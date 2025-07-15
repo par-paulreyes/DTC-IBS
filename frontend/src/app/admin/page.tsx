@@ -384,7 +384,7 @@ export default function AdminPage() {
         case "returned":
           return status === "returned";
         case "cancelled":
-          return status === "cancelled" || status === "declined";
+          return status === "cancelled";
         default:
           return true;
       }
