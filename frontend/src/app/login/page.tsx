@@ -17,9 +17,10 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    const emailPattern = /^\d{2}-\d{5}@g\.batstate-u\.edu\.ph$/;
-    if (!emailPattern.test(email)) {
-      setError("Email must be in format: XX-XXXXX@g.batstate-u.edu.ph");
+    // Remove strict BatStateU email pattern
+    // const emailPattern = /^\d{2}-\d{5}@g\.batstate-u\.edu\.ph$/;
+    if (!email || !email.includes('@') || !email.includes('.')) {
+      setError("Please enter a valid email address.");
       setLoading(false);
       return;
     }
@@ -95,10 +96,10 @@ export default function LoginPage() {
               <label className="block text-sm font-semibold text-[#162C49] mb-2">Email Address</label>
               <input
                 type="email"
-                placeholder="e.g., XX-XXXXX@g.batstate-u.edu.ph"
+                placeholder="e.g., your@email.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#162C49] focus:border-transparent text-base font-normal bg-white placeholder-gray-400"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
                 disabled={loading}
               />

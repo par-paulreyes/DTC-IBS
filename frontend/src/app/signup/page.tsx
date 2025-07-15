@@ -10,6 +10,7 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
   
   const router = useRouter();
 
@@ -22,9 +23,10 @@ export default function SignupPage() {
     setLoading(true);
     
     // Email validation
-    const emailPattern = /^\d{2}-\d{5}@g\.batstate-u\.edu\.ph$/;
-    if (!emailPattern.test(email)) {
-      setError("Email must be in format: XX-XXXXX@g.batstate-u.edu.ph");
+    // Remove strict BatStateU email pattern
+    // const emailPattern = /^\d{2}-\d{5}@g\.batstate-u\.edu\.ph$/;
+    if (!email || !email.includes('@') || !email.includes('.')) {
+      setError("Please enter a valid email address.");
       setLoading(false);
       return;
     }
@@ -42,12 +44,31 @@ export default function SignupPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Signup failed");
-      setSuccess("Signup successful! Redirecting to login...");
-      setTimeout(() => router.push("/login"), 2000);
+      setSuccess("Signup successful! Please check your email to verify your account before logging in.");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    setError("");
+    setSuccess("");
+    setResendLoading(true);
+    try {
+      const res = await fetch(`${apiUrl}/api/auth/resend-verification-pending`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to resend verification email");
+      setSuccess("A new verification email has been sent. Please check your inbox.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred while resending verification email");
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -98,10 +119,10 @@ export default function SignupPage() {
               <label className="block text-sm font-semibold text-[#162C49] mb-2">Email Address</label>
               <input
                 type="email"
-                placeholder="e.g., XX-XXXXX@g.batstate-u.edu.ph"
+                placeholder="e.g., your@email.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#162C49] focus:border-transparent text-base font-normal bg-white placeholder-gray-400"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
                 disabled={loading}
               />
@@ -121,6 +142,22 @@ export default function SignupPage() {
             {error && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-[#C1121F] text-sm font-medium">{error}</p>
+                {error === "A verification email has already been sent. Please check your inbox." && (
+                  <div className="mt-2 flex items-center">
+                    <button
+                      type="button"
+                      onClick={handleResendVerification}
+                      disabled={resendLoading}
+                      className="p-0 m-0 border-none bg-none text-blue-600 underline cursor-pointer hover:text-blue-800 disabled:text-gray-400 disabled:cursor-not-allowed text-sm font-medium"
+                      style={{ background: 'none', border: 'none' }}
+                    >
+                      Resend Verification Email
+                    </button>
+                    {resendLoading && (
+                      <span className="ml-2 text-xs text-gray-500">Sending...</span>
+                    )}
+                  </div>
+                )}
               </div>
             )}
             {success && (
