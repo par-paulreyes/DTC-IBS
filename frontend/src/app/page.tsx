@@ -49,16 +49,18 @@ export default function HomePage() {
           throw new Error("Failed to fetch items");
         }
         let data = await response.json();
-        // Filter out items with item_status === 'Bad Condition' and only show electronics and utility
-        data = data.filter((item: Item) => 
-          item.item_status !== 'Bad Condition' && 
-          (item.article_type.toLowerCase().includes('laptop') || 
-           item.article_type.toLowerCase().includes('projector') || 
-           item.article_type.toLowerCase().includes('tablet') || 
-           item.article_type.toLowerCase().includes('camera') || 
-           item.article_type.toLowerCase().includes('microphone') ||
-           item.article_type.toLowerCase().includes('utility'))
-        );
+        // Remove the filter that restricts items by item_status and article_type
+        // Previously:
+        // data = data.filter((item: Item) => 
+        //   item.item_status !== 'Bad Condition' && 
+        //   (item.article_type.toLowerCase().includes('laptop') || 
+        //    item.article_type.toLowerCase().includes('projector') || 
+        //    item.article_type.toLowerCase().includes('tablet') || 
+        //    item.article_type.toLowerCase().includes('camera') || 
+        //    item.article_type.toLowerCase().includes('microphone') ||
+        //    item.article_type.toLowerCase().includes('utility'))
+        // );
+        // Now, display all items from the backend
         setItems(data);
         setFilteredItems(data);
       } catch (err: unknown) {
