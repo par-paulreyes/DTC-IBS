@@ -48,7 +48,7 @@ export default function HomePage() {
         if (!response.ok) {
           throw new Error("Failed to fetch items");
         }
-        let data = await response.json();
+        const data = await response.json();
         // Remove the filter that restricts items by item_status and article_type
         // Previously:
         // data = data.filter((item: Item) => 
